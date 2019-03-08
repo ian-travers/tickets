@@ -7,6 +7,12 @@ down:
 test:
 	vendor/bin/phpunit
 
+test-unit:
+	vendor/bin/phpunit --filter unit
+
+test-feature:
+	vendor/bin/phpunit --filter feature
+
 assets-dev:
 	docker-compose exec node npm run dev
 
