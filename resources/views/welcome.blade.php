@@ -95,5 +95,8 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            @php echo phpinfo(); @endphp
+        </div>
     </body>
 </html>

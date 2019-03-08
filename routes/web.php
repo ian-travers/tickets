@@ -11,6 +11,9 @@
 |
 */
 
+Route::get('/concerts/{id}', 'ConcertController@show');
+
 Route::get('/', function () {
     return view('welcome');
 });
+
