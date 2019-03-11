@@ -20,6 +20,7 @@ class CreateConcertsTable extends Migration
             $table->string('state');
             $table->string('zip');
             $table->text('additional_info');
+            $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });
     }

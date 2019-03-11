@@ -8,7 +8,7 @@ use Tests\TestCase;
 
 class ViewConcertListingTest extends TestCase
 {
-    public function test_user_can_view_a_concert_listing()
+    public function test_user_can_view_a_published_concert_listing()
     {
         // Arrange | Организация
         // Create a concert
@@ -23,6 +23,7 @@ class ViewConcertListingTest extends TestCase
             'state' => 'ON',
             'zip' => '17456',
             'additional_info' => 'For tickets, call (555) 555-5555',
+            'published_at' => Carbon::parse('-1 week'),
         ]);
 
         // Act
@@ -43,5 +44,15 @@ class ViewConcertListingTest extends TestCase
         $response->assertSee('123 Exceed line');
         $response->assertSee('Laraville, ON 17456');
         $response->assertSee('For tickets, call (555) 555-5555');
+    }
+
+    public function test_user_cannot_view_unpublished_concert()
+    {
+        $concert = factory(Concert::class)->create([
+            'published_at' => null,
+        ]);
+
+        $response = $this->get('/concerts/'. $concert->id);
+        $response->assertStatus(404);
     }
 }

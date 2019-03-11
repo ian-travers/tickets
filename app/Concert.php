@@ -19,6 +19,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $state
  * @property string $zip
  * @property string $additional_info
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  *
  * @package App
  */
