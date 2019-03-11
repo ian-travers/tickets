@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 
 /**
  * Class Concert
@@ -22,6 +23,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
+ * @property-read  string $formatted_date
+ * @property-read  string $formatted_start_time
+ *
+ * @method static Builder published()
+ *
  * @package App
  */
 class Concert extends Model
@@ -29,6 +35,11 @@ class Concert extends Model
     protected $guarded = ['id'];
 
     protected $dates = ['date'];
+
+    public function scopePublished($query)
+    {
+        return $query->whereNotNull('published_at');
+    }
 
     public function getFormattedDateAttribute()
     {
