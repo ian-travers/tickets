@@ -25,13 +25,18 @@ class PurchaseTicketsTest extends TestCase
         $this->app->instance(PaymentGatewayInterface::class, $this->paymentGateway);
     }
 
+    private function orderTickets($concert, $params)
+    {
+        return $this->json('post', "/concerts/{$concert->id}/orders", $params);
+    }
+
     public function test_customer_can_purchase_concert_tickets()
     {
         // Arrange. Create a concert
         $concert = factory(Concert::class)->create(['ticket_price' => 3250]);
 
         // Act. Purchase concert tickets
-        $response = $this->json('post', "/concerts/{$concert->id}/orders", [
+        $response = $this->orderTickets($concert, [
             'email' => 'john@example.com',
             'ticket_quantity' => 3,
             'payment_token' => $this->paymentGateway->getValidTestToken(),
@@ -54,7 +59,7 @@ class PurchaseTicketsTest extends TestCase
     {
         $concert = factory(Concert::class)->create();
 
-        $response = $this->json('post', "/concerts/{$concert->id}/orders", [
+        $response = $this->orderTickets($concert, [
             'ticket_quantity' => 3,
             'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]);
@@ -68,7 +73,7 @@ class PurchaseTicketsTest extends TestCase
     {
         $concert = factory(Concert::class)->create();
 
-        $response = $this->json('post', "/concerts/{$concert->id}/orders", [
+        $response = $this->orderTickets($concert, [
             'email' => 'not-a-valid-email',
             'ticket_quantity' => 3,
             'payment_token' => $this->paymentGateway->getValidTestToken(),
@@ -83,7 +88,7 @@ class PurchaseTicketsTest extends TestCase
     {
         $concert = factory(Concert::class)->create();
 
-        $response = $this->json('post', "/concerts/{$concert->id}/orders", [
+        $response = $this->orderTickets($concert, [
             'email' => 'john@example.com',
             'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]);
@@ -97,7 +102,7 @@ class PurchaseTicketsTest extends TestCase
     {
         $concert = factory(Concert::class)->create();
 
-        $response = $this->json('post', "/concerts/{$concert->id}/orders", [
+        $response = $this->orderTickets($concert, [
             'email' => 'john@example.com',
             'ticket_quantity' => 0,
             'payment_token' => $this->paymentGateway->getValidTestToken(),
@@ -112,7 +117,7 @@ class PurchaseTicketsTest extends TestCase
     {
         $concert = factory(Concert::class)->create();
 
-        $response = $this->json('post', "/concerts/{$concert->id}/orders", [
+        $response = $this->orderTickets($concert, [
             'email' => 'john@example.com',
             'ticket_quantity' => 1,
         ]);
