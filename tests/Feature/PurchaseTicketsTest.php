@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Billing\PaymentGatewayInterface;
 use App\Concert;
 use App\Order;
+use Illuminate\Foundation\Testing\TestResponse;
 use Tests\TestCase;
 use App\Billing\FakePaymentGateway;
 
@@ -25,9 +26,16 @@ class PurchaseTicketsTest extends TestCase
         $this->app->instance(PaymentGatewayInterface::class, $this->paymentGateway);
     }
 
-    private function orderTickets($concert, $params)
+    private function orderTickets($concert, $params): TestResponse
     {
         return $this->json('post', "/concerts/{$concert->id}/orders", $params);
+    }
+
+    private function assertValidationError(TestResponse $response, string $field): void
+    {
+        $response->assertStatus(422);
+        $this->assertArrayHasKey('errors', $response->decodeResponseJson());
+        $this->assertArrayHasKey($field, $response->decodeResponseJson('errors'));
     }
 
     public function test_customer_can_purchase_concert_tickets()
@@ -64,9 +72,7 @@ class PurchaseTicketsTest extends TestCase
             'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]);
 
-        $response->assertStatus(422);
-        $this->assertArrayHasKey('errors', $response->decodeResponseJson());
-        $this->assertArrayHasKey('email', $response->decodeResponseJson('errors'));
+        $this->assertValidationError($response, 'email');
     }
 
     public function test_email_must_be_valid_to_purchase_tickets()
@@ -79,9 +85,7 @@ class PurchaseTicketsTest extends TestCase
             'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]);
 
-        $response->assertStatus(422);
-        $this->assertArrayHasKey('errors', $response->decodeResponseJson());
-        $this->assertArrayHasKey('email', $response->decodeResponseJson('errors'));
+        $this->assertValidationError($response, 'email');
     }
 
     public function test_ticket_quantity_is_required_to_purchase_tickets()
@@ -93,9 +97,7 @@ class PurchaseTicketsTest extends TestCase
             'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]);
 
-        $response->assertStatus(422);
-        $this->assertArrayHasKey('errors', $response->decodeResponseJson());
-        $this->assertArrayHasKey('ticket_quantity', $response->decodeResponseJson('errors'));
+        $this->assertValidationError($response, 'ticket_quantity');
     }
 
     public function test_ticket_quantity_must_be_least_1_to_purchase_tickets()
@@ -108,9 +110,7 @@ class PurchaseTicketsTest extends TestCase
             'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]);
 
-        $response->assertStatus(422);
-        $this->assertArrayHasKey('errors', $response->decodeResponseJson());
-        $this->assertArrayHasKey('ticket_quantity', $response->decodeResponseJson('errors'));
+        $this->assertValidationError($response, 'ticket_quantity');
     }
 
     public function test_payment_token_is_required()
@@ -122,9 +122,7 @@ class PurchaseTicketsTest extends TestCase
             'ticket_quantity' => 1,
         ]);
 
-        $response->assertStatus(422);
-        $this->assertArrayHasKey('errors', $response->decodeResponseJson());
-        $this->assertArrayHasKey('payment_token', $response->decodeResponseJson('errors'));
+        $this->assertValidationError($response, 'payment_token');
     }
 }
 
