@@ -69,7 +69,7 @@ class Concert extends Model
 
     public function orderTickets($email, $ticketQuantity): Order
     {
-        $tickets = $this->tickets()->whereNull('order_id')->take($ticketQuantity)->get();
+        $tickets = $this->tickets()->available()->take($ticketQuantity)->get();
         if ($tickets->count() < $ticketQuantity) {
             throw new NotEnoughTicketsException;
         }
@@ -93,6 +93,6 @@ class Concert extends Model
 
     public function ticketsRemaining()
     {
-        return $this->tickets()->whereNull('order_id')->count();
+        return $this->tickets()->available()->count();
     }
 }

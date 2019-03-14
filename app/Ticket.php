@@ -12,9 +12,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
+ * @method static Builder available()
+ *
  * @package App
  */
 class Ticket extends Model
 {
-    //
+    public function scopeAvailable($query)
+    {
+        return $query->whereNull('order_id');
+    }
 }
