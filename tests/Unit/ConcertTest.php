@@ -68,7 +68,9 @@ class ConcertTest extends TestCase
     public function test_can_add_tickets()
     {
         /** @var Concert $concert */
-        $concert = factory(Concert::class)->create()->addTickets(50);
+        $concert = factory(Concert::class)->create();
+
+        $concert->addTickets(50);
 
         $this->assertEquals(50, $concert->ticketsRemaining());
     }
@@ -83,7 +85,7 @@ class ConcertTest extends TestCase
         $this->assertEquals(20, $concert->ticketsRemaining());
     }
 
-    public function test_trying_to_purchase_more_tickets_than_remain_throws_and_exception()
+    public function test_trying_to_purchase_more_tickets_than_remain_throws_an_exception()
     {
         /** @var Concert $concert */
         $concert = factory(Concert::class)->create()->addTickets(10);
