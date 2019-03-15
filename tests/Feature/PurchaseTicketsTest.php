@@ -41,8 +41,7 @@ class PurchaseTicketsTest extends TestCase
     public function test_customer_can_purchase_tickets_to_a_published_concert()
     {
         // Arrange. Create a concert
-        $concert = factory(Concert::class)->states('published')->create(['ticket_price' => 3250]);
-        $concert->addTickets(3);
+        $concert = factory(Concert::class)->states('published')->create(['ticket_price' => 3250])->addTickets(3);
 
         // Act. Purchase concert tickets
         $response = $this->orderTickets($concert, [
@@ -65,8 +64,7 @@ class PurchaseTicketsTest extends TestCase
     public function test_cannot_purchase_tickets_to_an_unpublished_concert()
     {
         /** @var Concert $concert */
-        $concert = factory(Concert::class)->states('unpublished')->create();
-        $concert->addTickets(10);
+        $concert = factory(Concert::class)->states('unpublished')->create()->addTickets(10);
 
         $response = $this->orderTickets($concert, [
             'email' => 'john@example.com',
@@ -82,8 +80,7 @@ class PurchaseTicketsTest extends TestCase
     public function test_an_order_is_not_created_if_payment_fails()
     {
         /** @var Concert $concert */
-        $concert = factory(Concert::class)->states('published')->create(['ticket_price' => 3250]);
-        $concert->addTickets(10);
+        $concert = factory(Concert::class)->states('published')->create(['ticket_price' => 3250])->addTickets(10);
 
         $response = $this->orderTickets($concert, [
             'email' => 'john@example.com',
@@ -100,8 +97,7 @@ class PurchaseTicketsTest extends TestCase
     public function test_cannot_purchase_more_tickets_then_remain()
     {
         /** @var Concert $concert */
-        $concert = factory(Concert::class)->states('published')->create();
-        $concert->addTickets(50);
+        $concert = factory(Concert::class)->states('published')->create()->addTickets(50);
 
         $response = $this->orderTickets($concert, [
             'email' => 'john@example.com',
@@ -120,8 +116,7 @@ class PurchaseTicketsTest extends TestCase
     public function test_email_is_required_to_purchase_tickets()
     {
         /** @var Concert $concert */
-        $concert = factory(Concert::class)->states('published')->create();
-        $concert->addTickets(10);
+        $concert = factory(Concert::class)->states('published')->create()->addTickets(10);
 
         $response = $this->orderTickets($concert, [
             'ticket_quantity' => 3,
@@ -134,8 +129,7 @@ class PurchaseTicketsTest extends TestCase
     public function test_email_must_be_valid_to_purchase_tickets()
     {
         /** @var Concert $concert */
-        $concert = factory(Concert::class)->states('published')->create();
-        $concert->addTickets(10);
+        $concert = factory(Concert::class)->states('published')->create()->addTickets(10);
 
         $response = $this->orderTickets($concert, [
             'email' => 'not-a-valid-email',
@@ -149,8 +143,7 @@ class PurchaseTicketsTest extends TestCase
     public function test_ticket_quantity_is_required_to_purchase_tickets()
     {
         /** @var Concert $concert */
-        $concert = factory(Concert::class)->states('published')->create();
-        $concert->addTickets(10);
+        $concert = factory(Concert::class)->states('published')->create()->addTickets(10);
 
         $response = $this->orderTickets($concert, [
             'email' => 'john@example.com',
@@ -163,8 +156,7 @@ class PurchaseTicketsTest extends TestCase
     public function test_ticket_quantity_must_be_least_1_to_purchase_tickets()
     {
         /** @var Concert $concert */
-        $concert = factory(Concert::class)->states('published')->create();
-        $concert->addTickets(10);
+        $concert = factory(Concert::class)->states('published')->create()->addTickets(10);
 
         $response = $this->orderTickets($concert, [
             'email' => 'john@example.com',
@@ -178,8 +170,7 @@ class PurchaseTicketsTest extends TestCase
     public function test_payment_token_is_required()
     {
         /** @var Concert $concert */
-        $concert = factory(Concert::class)->states('published')->create();
-        $concert->addTickets(10);
+        $concert = factory(Concert::class)->states('published')->create()->addTickets(10);
 
         $response = $this->orderTickets($concert, [
             'email' => 'john@example.com',

@@ -55,8 +55,8 @@ class ConcertTest extends TestCase
 
     public function test_can_order_concert_tickets()
     {
-        $concert = factory(Concert::class)->create();
-        $concert->addTickets(3);
+        /** @var Concert $concert */
+        $concert = factory(Concert::class)->create()->addTickets(3);
 
         /* @var Order $order */
         $order = $concert->orderTickets('jane@example.com', 3);
@@ -67,18 +67,17 @@ class ConcertTest extends TestCase
 
     public function test_can_add_tickets()
     {
-        $concert = factory(Concert::class)->create();
-
-        $concert->addTickets(50);
+        /** @var Concert $concert */
+        $concert = factory(Concert::class)->create()->addTickets(50);
 
         $this->assertEquals(50, $concert->ticketsRemaining());
     }
 
     public function test_tickets_remaining_does_not_include_tickets_associated_with_an_order()
     {
-        $concert = factory(Concert::class)->create();
+        /** @var Concert $concert */
+        $concert = factory(Concert::class)->create()->addTickets(50);
 
-        $concert->addTickets(50);
         $concert->orderTickets('jane@example.com', 30);
 
         $this->assertEquals(20, $concert->ticketsRemaining());
@@ -86,9 +85,8 @@ class ConcertTest extends TestCase
 
     public function test_trying_to_purchase_more_tickets_than_remain_throws_and_exception()
     {
-        $concert = factory(Concert::class)->create();
-
-        $concert->addTickets(10);
+        /** @var Concert $concert */
+        $concert = factory(Concert::class)->create()->addTickets(10);
 
         try {
             $concert->orderTickets('jane@example.com', 11);
@@ -105,9 +103,8 @@ class ConcertTest extends TestCase
 
     public function test_cannot_order_tickets_that_have_already_purchased()
     {
-        $concert = factory(Concert::class)->create();
-
-        $concert->addTickets(10);
+        /** @var Concert $concert */
+        $concert = factory(Concert::class)->create()->addTickets(10);
 
         $concert->orderTickets('jane@example.com', 8);
         try {
