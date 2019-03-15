@@ -62,7 +62,7 @@ class ConcertTest extends TestCase
         $order = $concert->orderTickets('jane@example.com', 3);
 
         $this->assertEquals('jane@example.com', $order->email);
-        $this->assertEquals(3, $order->tickets()->count());
+        $this->assertEquals(3, $order->ticketQuantity());
     }
 
     public function test_can_add_tickets()

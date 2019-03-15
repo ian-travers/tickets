@@ -58,7 +58,7 @@ class PurchaseTicketsTest extends TestCase
         $this->assertEquals(9750, $this->paymentGateway->totalCharges());
         // Make sure that an order exists for this customer
         $this->assertTrue($concert->hasOrderFor('john@example.com'));
-        $this->assertEquals(3, $concert->ordersFor('john@example.com')->first()->tickets()->count());
+        $this->assertEquals(3, $concert->ordersFor('john@example.com')->first()->ticketQuantity());
     }
 
     public function test_cannot_purchase_tickets_to_an_unpublished_concert()
