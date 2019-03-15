@@ -91,8 +91,7 @@ class ConcertTest extends TestCase
         try {
             $concert->orderTickets('jane@example.com', 11);
         } catch (NotEnoughTicketsException $e) {
-            $order = $concert->orders()->where('email', 'jane@example.com')->first();
-            $this->assertNull($order);
+            $this->assertFalse($concert->hasOrderFor('jane@example.com'));
             $this->assertEquals(10, $concert->ticketsRemaining());
             return;
         }
@@ -110,8 +109,7 @@ class ConcertTest extends TestCase
         try {
             $concert->orderTickets('jphn@example.com', 3);
         } catch (NotEnoughTicketsException $e) {
-            $johnsOrder = $concert->orders()->where('email', 'john@example.com')->first();
-            $this->assertNull($johnsOrder);
+            $this->assertFalse($concert->hasOrderFor('john@example.com'));
             $this->assertEquals(2, $concert->ticketsRemaining());
             return;
         }
