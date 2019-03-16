@@ -119,4 +119,17 @@ class ConcertTest extends TestCase
         $this->fail("Заказ создан успешно, хотя свободных билетов для этого заказа не достаточно.");
 
     }
+
+    public function test_can_reserve_available_tickets()
+    {
+        /** @var Concert $concert */
+        $concert = factory(Concert::class)->create()->addTickets(3);
+
+        $this->assertEquals(3, $concert->ticketsRemaining());
+
+        $reservedTickets = $concert->reserveTickets(2);
+
+        $this->assertCount(2, $reservedTickets);
+        $this->assertEquals(1, $concert->ticketsRemaining());
+    }
 }
