@@ -116,6 +116,26 @@ class PurchaseTicketsTest extends TestCase
         $this->assertEquals(50, $concert->ticketsRemaining());
     }
 
+    public function test_cannot_purchase_tickets_another_customer_is_already_trying_to_purchase()
+    {
+                            // A RACE CONDITION
+        // Find tickets for person A
+                                        // Find tickets for person B
+                                        // Attempt to charge person B
+                                        // Create an order for person B
+        // Attempt to charge person A
+        // Create an order for person A
+
+        /** @var Concert $concert */
+        $concert = factory(Concert::class)->states('published')->create()->addTickets(3);
+
+        $response = $this->orderTickets($concert, [
+            'email' => 'person_A@example.com',
+            'ticket_quantity' => 51,
+            'payment_token' => $this->paymentGateway->getValidTestToken(),
+        ]);
+    }
+
     public function test_email_is_required_to_purchase_tickets()
     {
         /** @var Concert $concert */
