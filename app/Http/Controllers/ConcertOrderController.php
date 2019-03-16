@@ -37,7 +37,7 @@ class ConcertOrderController extends Controller
 
             // Create order for those tickets
             /** @var Order $order */
-            $order = $concert->createOrder(request('email'), $tickets);
+            $order = Order::forTickets($tickets, request('email'));
 
 
             return response()->json($order, 201);

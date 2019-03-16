@@ -20,6 +20,21 @@ class Order extends Model
 {
     protected $guarded = [];
 
+    public static function forTickets($tickets, $email): self
+    {
+        /** @var Order $order */
+        $order = self::create([
+            'email' => $email,
+            'amount' => $tickets->sum('price'),
+        ]);
+
+        foreach ($tickets as $ticket) {
+            $order->tickets()->save($ticket);
+        }
+
+        return $order;
+    }
+
     public function concert()
     {
         return $this->belongsTo(Concert::class);
