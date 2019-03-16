@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use App\Exceptions\NotEnoughTicketsException;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 
@@ -79,15 +80,26 @@ class Concert extends Model
 
     public function orderTickets($email, $ticketQuantity): Order
     {
-        $tickets = $this->tickets()->available()->take($ticketQuantity)->get();
-        if ($tickets->count() < $ticketQuantity) {
+        $tickets = $this->findTickets($ticketQuantity);
+        return $this->createOrder($email, $tickets);
+    }
+
+    public function findTickets($quantity)
+    {
+        $tickets = $this->tickets()->available()->take($quantity)->get();
+        if ($tickets->count() < $quantity) {
             throw new NotEnoughTicketsException;
         }
 
-        /* @var Order $order */
+        return $tickets;
+    }
+
+    public function createOrder($email, $tickets): Order
+    {
+        /** @var Order $order */
         $order = $this->orders()->create([
             'email' => $email,
-            'amount' => $ticketQuantity * $this->ticket_price,
+            'amount' => $tickets->count() * $this->ticket_price,
         ]);
 
         foreach ($tickets as $ticket) {
