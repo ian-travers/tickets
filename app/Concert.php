@@ -60,7 +60,8 @@ class Concert extends Model
 
     public function orders()
     {
-        return $this->hasMany(Order::class);
+        return $this->belongsToMany(Order::class, 'tickets');
+//        return $this->hasMany(Order::class);
     }
 
     public function hasOrderFor($customerEmail): bool
@@ -97,9 +98,9 @@ class Concert extends Model
     public function createOrder($email, $tickets): Order
     {
         /** @var Order $order */
-        $order = $this->orders()->create([
+        $order = Order::create([
             'email' => $email,
-            'amount' => $tickets->count() * $this->ticket_price,
+            'amount' => $tickets->sum('price'),
         ]);
 
         foreach ($tickets as $ticket) {
