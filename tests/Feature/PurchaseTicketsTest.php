@@ -12,7 +12,7 @@ use App\Billing\FakePaymentGateway;
 /**
  * Class PurchaseTicketsTest
  *
- * @property PaymentGatewayInterface $paymentGateway
+ * @property FakePaymentGateway $paymentGateway
  *
  * @package Tests\Feature
  */
@@ -110,7 +110,6 @@ class PurchaseTicketsTest extends TestCase
         ]);
 
         $response->assertStatus(422);
-        /* @var Order $order */
         $this->assertFalse($concert->hasOrderFor('john@example.com'));
         $this->assertEquals(0, $this->paymentGateway->totalCharges());
         $this->assertEquals(50, $concert->ticketsRemaining());
@@ -127,13 +126,31 @@ class PurchaseTicketsTest extends TestCase
         // Create an order for person A
 
         /** @var Concert $concert */
-        $concert = factory(Concert::class)->states('published')->create()->addTickets(3);
+        $concert = factory(Concert::class)->states('published')->create([
+            'ticket_price' => 1200,
+        ])->addTickets(3);
+
+        $this->paymentGateway->beforeFirstCharge(function ($paymentGateway) use($concert) {
+            $response = $this->orderTickets($concert, [
+                'email' => 'person_B@example.com',
+                'ticket_quantity' => 1,
+                'payment_token' => $this->paymentGateway->getValidTestToken(),
+            ]);
+
+            $response->assertStatus(422);
+            $this->assertFalse($concert->hasOrderFor('person_B@example.com'));
+            $this->assertEquals(0, $this->paymentGateway->totalCharges());
+        });
 
         $response = $this->orderTickets($concert, [
             'email' => 'person_A@example.com',
-            'ticket_quantity' => 51,
+            'ticket_quantity' => 3,
             'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]);
+
+        $this->assertEquals(3600, $this->paymentGateway->totalCharges());
+        $this->assertTrue($concert->hasOrderFor('person_A@example.com'));
+        $this->assertEquals(3, $concert->ordersFor('person_A@example.com')->first()->ticketQuantity());
     }
 
     public function test_email_is_required_to_purchase_tickets()
