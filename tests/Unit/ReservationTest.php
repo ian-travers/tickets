@@ -32,15 +32,9 @@ class ReservationTest extends TestCase
     public function test_reserved_tickets_are_released_when_a_reservation_is_cancelled()
     {
         $tickets = collect([
-            \Mockery::mock(Ticket::class, function ($mock) {
-                $mock->shouldReceive('release')->once();
-            }),
-            \Mockery::mock(Ticket::class, function ($mock) {
-                $mock->shouldReceive('release')->once();
-            }),
-            \Mockery::mock(Ticket::class, function ($mock) {
-                $mock->shouldReceive('release')->once();
-            }),
+            \Mockery::mock(Ticket::class)->shouldReceive('release')->once()->getMock(),
+            \Mockery::mock(Ticket::class)->shouldReceive('release')->once()->getMock(),
+            \Mockery::mock(Ticket::class)->shouldReceive('release')->once()->getMock(),
         ]);
 
         $reservation = new Reservation($tickets);
