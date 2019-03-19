@@ -100,6 +100,7 @@ class PurchaseTicketsTest extends TestCase
 
         $response->assertStatus(422);
         $this->assertFalse($concert->hasOrderFor('john@example.com'));
+        $this->assertEquals(10, $concert->ticketsRemaining());
     }
 
     public function test_cannot_purchase_more_tickets_then_remain()
