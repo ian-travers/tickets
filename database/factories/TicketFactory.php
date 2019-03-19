@@ -12,3 +12,9 @@ $factory->define(Ticket::class, function (Faker $faker) {
 
     ];
 });
+
+$factory->state(Ticket::class, 'reserved', function (Faker $faker) {
+    return [
+        'reserved_at' => Carbon::now(),
+    ];
+});
