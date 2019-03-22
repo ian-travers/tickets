@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
+ * @property-read \App\Concert $concert
+ *
  * @package App
  */
 class Order extends Model

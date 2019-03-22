@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Billing\FakePaymentGateway;
 use Illuminate\Support\Collection;
 
 /**
@@ -36,8 +37,10 @@ class Reservation
         return $this->email;
     }
 
-    public function complete(): Order
+    public function complete($paymentGateway, $paymentToken): Order
     {
+        /** @var FakePaymentGateway $paymentGateway */
+        $paymentGateway->charge($this->totalCost(), $paymentToken);
         return Order::forTickets($this->tickets(), $this->email(), $this->totalCost());
     }
 

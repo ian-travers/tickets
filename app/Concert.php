@@ -4,9 +4,9 @@ namespace App;
 
 use Carbon\Carbon;
 use App\Exceptions\NotEnoughTicketsException;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Collection;
 
 /**
  * Class Concert
@@ -24,9 +24,8 @@ use Illuminate\Database\Query\Builder;
  * @property string $additional_info
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- *
- * @property-read  string $formatted_date
- * @property-read  string $formatted_start_time
+ * @property-read string $formatted_date
+ * @property-read string $formatted_start_time
  *
  * @method static Builder published()
  *
@@ -87,7 +86,7 @@ class Concert extends Model
 
     public function reserveTickets($quantity, $email): Reservation
     {
-        $tickets =  $this->findTickets($quantity)->each(function ($ticket) {
+        $tickets =  $this->findTickets($quantity)->each(function (Ticket $ticket) {
             $ticket->reserve();
         });
 

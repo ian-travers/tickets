@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $reserved_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- *
  * @property Concert $concert
  *
  * @method static Builder available()
