@@ -9,6 +9,11 @@ class StripePaymentGatewayTest extends TestCase
 {
     public function test_charges_with_a_valid_payment_token_are_successful()
     {
+        $lastCharge = \Stripe\Charge::all(
+            ['limit' => 1],
+            ['api_key' => config('services.stripe.secret')]
+        )['data'][0];
+
         // Create a new StripePaymentGateway
         $paymentGateway = new StripePaymentGateway(config('services.stripe.secret'));
 
@@ -25,11 +30,14 @@ class StripePaymentGatewayTest extends TestCase
         $paymentGateway->charge(2500, $token);
 
         // Verify that the charge was completed successfully
-        $lastCharge = \Stripe\Charge::all(
-            ['limit' => 1],
+        $newCharge = \Stripe\Charge::all(
+            [
+                'limit' => 1,
+                'ending_before' => $lastCharge->id,
+            ],
             ['api_key' => config('services.stripe.secret')]
         )['data'][0];
 
-        $this->assertEquals(2500, $lastCharge->amount);
+        $this->assertEquals(2500, $newCharge->amount);
     }
 }
