@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Billing\StripePaymentGateway;
 use Tests\TestCase;
 
 class StripePaymentGatewayTest extends TestCase
@@ -9,7 +10,7 @@ class StripePaymentGatewayTest extends TestCase
     public function test_charges_with_a_valid_payment_token_are_successful()
     {
         // Create a new StripePaymentGateway
-        $paymentGateway = new StripePaymentGateway();
+        $paymentGateway = new StripePaymentGateway(config('services.stripe.secret'));
 
         $token = \Stripe\Token::create([
             'card' => [
@@ -19,8 +20,6 @@ class StripePaymentGatewayTest extends TestCase
                 'cvc' => '123'
             ]
         ], ['api_key' => config('services.stripe.secret')])->id;
-
-        dd($token);
 
         // Create a new charge for some amount using a valid token
         $paymentGateway->charge(2500, $token);
