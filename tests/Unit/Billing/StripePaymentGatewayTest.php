@@ -5,8 +5,37 @@ namespace Tests\Unit;
 use App\Billing\StripePaymentGateway;
 use Tests\TestCase;
 
+/**
+ * Class StripePaymentGatewayTest
+ *
+ * @group integration
+ */
 class StripePaymentGatewayTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->lastCharge = $this->lastCharge();
+    }
+
+    /**
+     *  WARNING: This test can't run without internet access
+     *
+     *  Use "phpunit --exclude-group integration" to run tests without this one
+     */
+    public function test_charges_with_a_valid_payment_token_are_successful()
+    {
+        // Create a new StripePaymentGateway
+        $paymentGateway = new StripePaymentGateway(config('services.stripe.secret'));
+
+        // Create a new charge for some amount using a valid token
+        $paymentGateway->charge(2500, $this->validToken());
+
+        // Verify that the charge was completed successfully
+        $this->assertCount(1, $this->newCharges($this->lastCharge));
+        $this->assertEquals(2500, $this->lastCharge()->amount);
+    }
+
     private function lastCharge()
     {
         return \Stripe\Charge::all(
@@ -38,22 +67,4 @@ class StripePaymentGatewayTest extends TestCase
         ], ['api_key' => config('services.stripe.secret')])->id;
     }
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->lastCharge = $this->lastCharge();
-    }
-
-    public function test_charges_with_a_valid_payment_token_are_successful()
-    {
-        // Create a new StripePaymentGateway
-        $paymentGateway = new StripePaymentGateway(config('services.stripe.secret'));
-
-        // Create a new charge for some amount using a valid token
-        $paymentGateway->charge(2500, $this->validToken());
-
-        // Verify that the charge was completed successfully
-        $this->assertCount(1, $this->newCharges($this->lastCharge));
-        $this->assertEquals(2500, $this->lastCharge()->amount);
-    }
 }
