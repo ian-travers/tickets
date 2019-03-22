@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+
 use Illuminate\Support\Collection;
 
 /**
@@ -33,6 +34,11 @@ class Reservation
     public function email()
     {
         return $this->email;
+    }
+
+    public function complete(): Order
+    {
+        return Order::forTickets($this->tickets(), $this->email(), $this->totalCost());
     }
 
     public function cancel()

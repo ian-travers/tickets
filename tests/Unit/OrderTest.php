@@ -15,7 +15,6 @@ class OrderTest extends TestCase
 
         $this->assertEquals(5, $concert->ticketsRemaining());
 
-        /** @var Order $order */
         $order = Order::forTickets($concert->findTickets(3), 'john@example.com', 3600);
 
         $this->assertEquals('john@example.com', $order->email);

@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Concert;
+use App\Order;
 use App\Reservation;
 use App\Ticket;
 use Tests\TestCase;
@@ -63,5 +64,20 @@ class ReservationTest extends TestCase
         foreach ($tickets as $ticket) {
             $ticket->shouldHaveReceived('release');
         }
+    }
+
+    public function test_completing_the_reservation()
+    {
+        /** @var Concert $concert */
+        $concert = factory(Concert::class)->create(['ticket_price' => 1200]);
+        $tickets = factory(Ticket::class, 3)->create(['concert_id' => $concert->id]);
+        $reservation = new Reservation($tickets, 'john@example.com');
+
+        /** @var Order $order */
+        $order = $reservation->complete();
+
+        $this->assertEquals('john@example.com', $order->email);
+        $this->assertEquals(3, $order->ticketQuantity());
+        $this->assertEquals(3600, $order->amount);
     }
 }
