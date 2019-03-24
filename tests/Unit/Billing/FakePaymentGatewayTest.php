@@ -13,6 +13,7 @@ class FakePaymentGatewayTest extends TestCase
         $paymentGateway->charge(2500, $paymentGateway->getValidTestToken());
 
         $this->assertEquals(2500, $paymentGateway->totalCharges());
+
     }
 
     /**
