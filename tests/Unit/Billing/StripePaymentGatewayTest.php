@@ -22,15 +22,4 @@ class StripePaymentGatewayTest extends TestCase
     {
         return new StripePaymentGateway(config('services.stripe.secret'));
     }
-
-    /**
-     * @expectedException \App\Billing\PaymentFailedException
-     */
-    public function test_charges_with_an_invalid_payment_token_fail()
-    {
-        $paymentGateway = $this->getPaymentGateway();
-        $paymentGateway->charge(2500, 'invalid-payment-token');
-
-        $this->fail("Charging with an invalid payment token did't throw a PaymentFailedException");
-    }
 }

@@ -14,17 +14,6 @@ class FakePaymentGatewayTest extends TestCase
         return new FakePaymentGateway();
     }
 
-    /**
-     * @expectedException \App\Billing\PaymentFailedException
-     */
-    public function test_charges_with_an_invalid_payment_token_fail()
-    {
-        $paymentGateway = $this->getPaymentGateway();
-        $paymentGateway->charge(2500, 'invalid-payment-token');
-
-        $this->fail("Charging with an invalid payment token did't throw a PaymentFailedException");
-    }
-
     public function test_running_a_hook_before_the_first_charge()
     {
         $paymentGateway = $this->getPaymentGateway();
