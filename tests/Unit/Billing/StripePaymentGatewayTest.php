@@ -12,7 +12,7 @@ use Tests\TestCase;
  */
 class StripePaymentGatewayTest extends TestCase
 {
-    private function getPaymentGateway()
+    protected function getPaymentGateway()
     {
         return new StripePaymentGateway(config('services.stripe.secret'));
     }
