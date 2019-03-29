@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id
  * @property int $concert_id
+ * @property string $confirmation_number
  * @property int $amount
  * @property string $email
  * @property Carbon|null $created_at
