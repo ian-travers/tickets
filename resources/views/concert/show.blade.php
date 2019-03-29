@@ -62,7 +62,7 @@
                                     </div>
                                     <div class="media-body p-xs-l-2">
                                         <h3 class="text-base wt-medium text-dark">Additional Information</h3>
-                                        <p>{{ $concert->additional_information}}</p>
+                                        <p>{{ $concert->additional_info}}</p>
                                     </div>
                                 </div>
                             </div>
