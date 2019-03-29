@@ -120,6 +120,10 @@
                     </div>
                 </div>
             </div>
+
+            <div class="text-center text-dark-soft wt-medium">
+                <p>Powered by TicketBeast</p>
+            </div>
         </div>
     </div>
 @endsection
