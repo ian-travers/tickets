@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Billing\PaymentGatewayInterface;
 use App\Concert;
-use App\Order;
+use App\OrderConfirmationNumberGeneratorInterface;
 use Illuminate\Foundation\Testing\TestResponse;
 use Tests\TestCase;
 use App\Billing\FakePaymentGateway;
@@ -44,7 +44,12 @@ class PurchaseTicketsTest extends TestCase
 
     public function test_customer_can_purchase_tickets_to_a_published_concert()
     {
-        // Arrange. Create a concert
+        $orderConfirmationNumberGenerator = \Mockery::mock(OrderConfirmationNumberGeneratorInterface::class, [
+            'generate' => 'ORDERCONFIRMATION1234',
+        ]);
+        $this->app->instance(OrderConfirmationNumberGeneratorInterface::class, $orderConfirmationNumberGenerator);
+
+        // Create a concert
 
         /** @var Concert $concert */
         $concert = factory(Concert::class)->states('published')->create(['ticket_price' => 3250])->addTickets(3);
@@ -62,6 +67,7 @@ class PurchaseTicketsTest extends TestCase
         // Make sure the customer was charged the correct amount
         $this->assertEquals(9750, $this->paymentGateway->totalCharges());
         $response->assertJsonFragment([
+            'confirmation_number' => 'ORDERCONFIRMATION1234',
             'email' => 'john@example.com',
             'ticket_quantity' => 3,
             'amount' => 9750,
