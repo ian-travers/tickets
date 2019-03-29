@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $confirmation_number
  * @property int $amount
  * @property string $email
+ * @property string|null $card_last_four
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $order_id
  * @property Carbon|null $reserved_at
+ * @property string|null $code
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Concert $concert
