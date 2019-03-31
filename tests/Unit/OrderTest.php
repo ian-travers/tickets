@@ -2,16 +2,19 @@
 
 namespace Tests\Unit;
 
+use App\Billing\Charge;
 use App\Order;
 use App\Ticket;
 use Tests\TestCase;
 
 class OrderTest extends TestCase
 {
-    public function test_create_order_from_tickets_email_and_amount()
+    public function test_create_order_from_tickets_email_and_charge()
     {
         $tickets = factory(Ticket::class, 3)->create();
-        $order = Order::forTickets($tickets, 'john@example.com', 3600);
+        $charge = new Charge(['amount' => 3600]);
+
+        $order = Order::forTickets($tickets, 'john@example.com', $charge);
 
         $this->assertEquals('john@example.com', $order->email);
         $this->assertEquals(3, $order->ticketQuantity());
