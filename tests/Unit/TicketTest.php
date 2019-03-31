@@ -2,10 +2,9 @@
 
 namespace Tests\Unit;
 
-use App\Concert;
 use App\Order;
 use App\Ticket;
-use Carbon\Carbon;
+use App\Facades\TicketCode;
 use Tests\TestCase;
 
 class TicketTest extends TestCase
@@ -33,5 +32,24 @@ class TicketTest extends TestCase
         $this->assertNull($ticket->fresh()->reserved_at);
 
 
+    }
+
+    public function test_ticket_can_be_claimed_for_an_order()
+    {
+        /** @var Order $order */
+        $order = factory(Order::class)->create();
+
+        /** @var Ticket $ticket */
+        $ticket = factory(Ticket::class)->create(['code' => null]);
+
+        TicketCode::shouldReceive('generate')->andReturn('TICKETCODE1');
+
+        $ticket->claimFor($order);
+
+        // Assert that the ticket is saved to the order
+        $this->assertContains($ticket->id, $order->tickets->pluck('id'));
+
+        // Arrest that the ticket had the expected code generated
+        $this->assertEquals('TICKETCODE1', $ticket->code);
     }
 }

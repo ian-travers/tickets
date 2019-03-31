@@ -2,7 +2,7 @@
 
 namespace App;
 
-interface OrderConfirmationNumberGeneratorInterface
+interface TicketCodeGeneratorInterface
 {
     public function generate();
 }
