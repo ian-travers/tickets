@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $confirmation_number
  * @property int $amount
  * @property string $email
- * @property string|null $card_last_four
+ * @property string $card_last_four
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -33,6 +33,7 @@ class Order extends Model
             'confirmation_number' => OrderConfirmationNumber::generate(),
             'email' => $email,
             'amount' => $charge->amount(),
+            'card_last_four' => $charge->cardLastFour(),
         ]);
 
         foreach ($tickets as $ticket) {
