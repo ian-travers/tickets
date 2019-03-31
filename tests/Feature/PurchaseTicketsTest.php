@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Billing\PaymentGatewayInterface;
 use App\Concert;
+use App\Facades\OrderConfirmationNumber;
 use App\OrderConfirmationNumberGeneratorInterface;
 use Illuminate\Foundation\Testing\TestResponse;
 use Tests\TestCase;
@@ -44,10 +45,7 @@ class PurchaseTicketsTest extends TestCase
 
     public function test_customer_can_purchase_tickets_to_a_published_concert()
     {
-        $orderConfirmationNumberGenerator = \Mockery::mock(OrderConfirmationNumberGeneratorInterface::class, [
-            'generate' => 'ORDERCONFIRMATION1234',
-        ]);
-        $this->app->instance(OrderConfirmationNumberGeneratorInterface::class, $orderConfirmationNumberGenerator);
+        OrderConfirmationNumber::shouldReceive('generate')->andReturn('ORDERCONFIRMATION1234');
 
         // Create a concert
 
@@ -69,8 +67,12 @@ class PurchaseTicketsTest extends TestCase
         $response->assertJsonFragment([
             'confirmation_number' => 'ORDERCONFIRMATION1234',
             'email' => 'john@example.com',
-            'ticket_quantity' => 3,
             'amount' => 9750,
+            'tickets' => [
+                ['code' => 'TICKETCODE1'],
+                ['code' => 'TICKETCODE2'],
+                ['code' => 'TICKETCODE3'],
+            ],
         ]);
         // Make sure that an order exists for this customer
         $this->assertTrue($concert->hasOrderFor('john@example.com'));

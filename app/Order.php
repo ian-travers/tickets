@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $updated_at
  *
  * @property-read \App\Concert $concert
+ * @property-read \App\Ticket[] $tickets
  *
  * @package App
  */
@@ -68,8 +69,10 @@ class Order extends Model
         return [
             'confirmation_number' => $this->confirmation_number,
             'email' => $this->email,
-            'ticket_quantity' => $this->ticketQuantity(),
             'amount' => $this->amount,
+            'tickets' => $this->tickets->map(function ($ticket) {
+                return ['code' => $ticket->code];
+            })->all(),
         ];
     }
 }
