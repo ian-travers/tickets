@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Billing\PaymentGatewayInterface;
 use App\Concert;
 use App\Facades\OrderConfirmationNumber;
+use App\Facades\TicketCode;
 use App\OrderConfirmationNumberGeneratorInterface;
 use Illuminate\Foundation\Testing\TestResponse;
 use Tests\TestCase;
@@ -46,6 +47,7 @@ class PurchaseTicketsTest extends TestCase
     public function test_customer_can_purchase_tickets_to_a_published_concert()
     {
         OrderConfirmationNumber::shouldReceive('generate')->andReturn('ORDERCONFIRMATION1234');
+        TicketCode::shouldReceive('generateFor')->andReturn('TICKETCODE1', 'TICKETCODE2', 'TICKETCODE3');
 
         // Create a concert
 
