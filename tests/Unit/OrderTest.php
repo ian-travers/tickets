@@ -2,7 +2,6 @@
 
 namespace Tests\Unit;
 
-use App\Concert;
 use App\Order;
 use App\Ticket;
 use Tests\TestCase;
@@ -11,17 +10,12 @@ class OrderTest extends TestCase
 {
     public function test_create_order_from_tickets_email_and_amount()
     {
-        /** @var Concert $concert */
-        $concert = factory(Concert::class)->create()->addTickets(5);
-
-        $this->assertEquals(5, $concert->ticketsRemaining());
-
-        $order = Order::forTickets($concert->findTickets(3), 'john@example.com', 3600);
+        $tickets = factory(Ticket::class, 3)->create();
+        $order = Order::forTickets($tickets, 'john@example.com', 3600);
 
         $this->assertEquals('john@example.com', $order->email);
         $this->assertEquals(3, $order->ticketQuantity());
         $this->assertEquals(3600, $order->amount);
-        $this->assertEquals(2, $concert->ticketsRemaining());
     }
 
     public function test_retrieving_an_order_by_confirmation_number()
