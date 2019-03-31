@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use App\Exceptions\NotEnoughTicketsException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Collection;
 
 /**
  * Class Concert
@@ -78,12 +77,6 @@ class Concert extends Model
         return $this->hasMany(Ticket::class);
     }
 
-    public function orderTickets($email, $ticketQuantity): Order
-    {
-        $tickets = $this->findTickets($ticketQuantity);
-        return $this->createOrder($email, $tickets);
-    }
-
     public function reserveTickets($quantity, $email): Reservation
     {
         $tickets =  $this->findTickets($quantity)->each(function (Ticket $ticket) {
@@ -101,11 +94,6 @@ class Concert extends Model
         }
 
         return $tickets;
-    }
-
-    public function createOrder($email, $tickets): Order
-    {
-        return Order::forTickets($tickets, $email, $tickets->sum('price'));
     }
 
     public function addTickets($quantity): self
