@@ -11,15 +11,21 @@ class OrderTest extends TestCase
 {
     public function test_create_order_from_tickets_email_and_charge()
     {
-        $tickets = factory(Ticket::class, 3)->create();
         $charge = new Charge(['amount' => 3600, 'card_last_four' => '1234']);
+
+        $tickets = collect([
+            \Mockery::spy(Ticket::class),
+            \Mockery::spy(Ticket::class),
+            \Mockery::spy(Ticket::class),
+        ]);
 
         $order = Order::forTickets($tickets, 'john@example.com', $charge);
 
         $this->assertEquals('john@example.com', $order->email);
-        $this->assertEquals(3, $order->ticketQuantity());
+//        $this->assertEquals(3, $order->ticketQuantity());
         $this->assertEquals(3600, $order->amount);
         $this->assertEquals('1234', $order->card_last_four);
+        $tickets->each->shouldHaveReceived('claimFor', [$order]);
     }
 
     public function test_retrieving_an_order_by_confirmation_number()
