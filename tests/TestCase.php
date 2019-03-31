@@ -19,5 +19,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
         $this->setupDatabase();
+
+        \Mockery::getConfiguration()->allowMockingNonExistentMethods(false);
     }
 }
