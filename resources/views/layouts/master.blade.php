@@ -9,16 +9,18 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- Scripts -->
-    <script src="{{ mix('js/app.js', 'build') }}" defer></script>
-
     <!-- Styles -->
     <link href="{{ mix('css/app.css', 'build') }}" rel="stylesheet">
+
+    @include('scripts.app')
 </head>
 
 <body class="bg-dark">
 <div id="app">
     @yield('content')
 </div>
+
+@yield('beforeScript')
+<script src="{{ mix('js/app.js', 'build') }}"></script>
 </body>
 </html>

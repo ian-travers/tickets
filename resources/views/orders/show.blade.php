@@ -13,7 +13,7 @@
                     </div>
                     <div class="p-xs-y-4 border-b">
                         <p><strong>Order Total: ${{ number_format($order->amount / 100, 2) }}</strong></p>
-                        <p class="text-dark-soft">Billed to Card #: **** **** **** {{ $order->card_last_four }}4242</p>
+                        <p class="text-dark-soft">Billed to Card #: **** **** **** {{ $order->card_last_four }}</p>
                     </div>
                 </div>
 

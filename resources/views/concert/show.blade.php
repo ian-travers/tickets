@@ -1,5 +1,9 @@
 @extends('layouts.master')
 
+@section('beforeScript')
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+@endsection
+
 @section('content')
     <div class="bg-soft p-xs-y-7 full-height">
         <div class="container">
@@ -85,4 +89,8 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('beforeScripts')
+    <script src="https://checkout.stripe.com/checkout.js"></script>
 @endsection
