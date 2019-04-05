@@ -6,8 +6,9 @@ use App\Billing\PaymentGatewayInterface;
 use App\Concert;
 use App\Facades\OrderConfirmationNumber;
 use App\Facades\TicketCode;
-use App\OrderConfirmationNumberGeneratorInterface;
+use App\Mail\OrderConfirmationEmail;
 use Illuminate\Foundation\Testing\TestResponse;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 use App\Billing\FakePaymentGateway;
 
@@ -46,6 +47,8 @@ class PurchaseTicketsTest extends TestCase
 
     public function test_customer_can_purchase_tickets_to_a_published_concert()
     {
+        Mail::fake();
+
         OrderConfirmationNumber::shouldReceive('generate')->andReturn('ORDERCONFIRMATION1234');
         TicketCode::shouldReceive('generateFor')->andReturn('TICKETCODE1', 'TICKETCODE2', 'TICKETCODE3');
 
@@ -76,9 +79,17 @@ class PurchaseTicketsTest extends TestCase
                 ['code' => 'TICKETCODE3'],
             ],
         ]);
+
         // Make sure that an order exists for this customer
         $this->assertTrue($concert->hasOrderFor('john@example.com'));
-        $this->assertEquals(3, $concert->ordersFor('john@example.com')->first()->ticketQuantity());
+
+        $order = $concert->ordersFor('john@example.com')->first();
+        $this->assertEquals(3, $order->ticketQuantity());
+
+        Mail::assertSent(OrderConfirmationEmail::class, function ($mail) use ($order) {
+            return $mail->hasTo('john@example.com')
+                && $mail->order->id == $order->id;
+        });
     }
 
     public function test_cannot_purchase_tickets_to_an_unpublished_concert()
