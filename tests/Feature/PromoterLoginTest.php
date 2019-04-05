@@ -8,6 +8,13 @@ use Tests\TestCase;
 
 class PromoterLoginTest extends TestCase
 {
+    public function test_showing_the_login_form()
+    {
+        $response = $this->get('/login');
+
+        $response->assertStatus(200);
+    }
+
     public function test_logging_in_with_valid_credentials()
     {
         $this->withoutExceptionHandling();
