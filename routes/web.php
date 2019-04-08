@@ -1,5 +1,9 @@
 <?php
 
+Route::get('/', function () {
+    return view('welcome');
+});
+
 Route::get('/mockups/order', function () {
     return view('mockups.order.show');
 });
