@@ -23,7 +23,7 @@ class PromoterLoginTest extends DuskTestCase
                 ->type('email', 'jane@example.com')
                 ->type('password', '111111')
                 ->press('Log in')
-                ->assertPathIs('/backstage/concerts');
+                ->assertPathIs('/backstage/concerts/new');
         });
     }
 

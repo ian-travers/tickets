@@ -29,7 +29,7 @@ class PromoterLoginTest extends TestCase
             'password' => '111111',
         ]);
 
-        $response->assertRedirect('/backstage/concerts');
+        $response->assertRedirect('/backstage/concerts/new');
         $this->assertTrue(Auth::check());
         $this->assertTrue(Auth::user()->is($user));
     }

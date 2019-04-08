@@ -16,4 +16,4 @@ Route::get('/login', 'Auth\LoginController@showLoginForm');
 Route::post('/login', 'Auth\LoginController@login');
 Route::post('/logout', 'Auth\LoginController@logout');
 
-Route::get('/backstage/concert/new', 'Backstage\ConcertController@create');
+Route::get('/backstage/concerts/new', 'Backstage\ConcertController@create');
