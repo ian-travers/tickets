@@ -113,4 +113,44 @@ class AddConcertTest extends TestCase
         $response->assertSessionHasErrors('title');
         $this->assertEquals(0, Concert::count());
     }
+
+    public function test_subtitle_is_optional()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->post('/backstage/concerts', [
+            'title' => 'No Warning',
+            'subtitle' => '',
+            'additional_info' => "You must be 19 years of age to attend this concert.",
+            'date' => '2019-04-18',
+            'time' => '8:00pm',
+            'venue' => 'The Mosh Pit',
+            'venue_address' => '123 Fake St.',
+            'city' => 'Laraville',
+            'state' => 'ON',
+            'zip' => '123456',
+            'ticket_price' => '32.50',
+            'ticket_quantity' => '75',
+        ]);
+
+        tap(Concert::first(), function ($concert) use ($response, $user) {
+            /** @var Concert $concert */
+            $response->assertStatus(302);
+            $response->assertRedirect("/concerts/{$concert->id}");
+
+            $this->assertEquals('No Warning', $concert->title);
+            $this->assertNull($concert->subtitle);
+            $this->assertEquals("You must be 19 years of age to attend this concert.", $concert->additional_info);
+            $this->assertEquals(Carbon::parse('2019-04-18 8:00pm'), $concert->date);
+            $this->assertEquals('The Mosh Pit', $concert->venue);
+            $this->assertEquals('123 Fake St.', $concert->venue_address);
+            $this->assertEquals('Laraville', $concert->city);
+            $this->assertEquals('ON', $concert->state);
+            $this->assertEquals('123456', $concert->zip);
+            $this->assertEquals(3250, $concert->ticket_price);
+            $this->assertEquals(75, $concert->ticketsRemaining());
+        });
+    }
 }
