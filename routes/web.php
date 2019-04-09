@@ -8,7 +8,7 @@ Route::get('/mockups/order', function () {
     return view('mockups.order.show');
 });
 
-Route::get('/concerts/{id}', 'ConcertController@show');
+Route::get('/concerts/{id}', 'ConcertController@show')->name('concerts.show');
 Route::post('/concerts/{id}/orders', 'ConcertOrderController@store');
 Route::get('/orders/{confirmationNumber}', 'OrderController@show');
 
@@ -18,6 +18,11 @@ Route::post('/logout', 'Auth\LoginController@logout')->name('auth.logout');
 
 Route::group([
     'middleware' => 'auth',
+    'prefix' => 'backstage',
+    'namespace' => 'Backstage'
 ], function () {
-    Route::get('/backstage/concerts/new', 'Backstage\ConcertController@create');
+    Route::get('/concerts/new', 'ConcertController@create');
+    Route::post('/concerts', 'ConcertController@store');
 });
+
+
