@@ -11,18 +11,18 @@
                     <div class="form-group">
                         <label class="form-label pseudo-hidden">Email address</label>
                         <div class="input-group">
-                        <span class="input-group-addon">
-                            @icon('user', 'text-dark-muted text-xs')
-                        </span>
-                            <input type="email" name="email" class="form-control" placeholder="Email address" value="{{ old('email') }}">
+                            <span class="input-group-addon">
+                                @icon('user', 'text-dark-muted text-xs')
+                            </span>
+                            <input type="text" name="email" class="form-control" placeholder="Email address" value="{{ old('email') }}" autofocus>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="form-label pseudo-hidden">Password</label>
                         <div class="input-group">
-                        <span class="input-group-addon">
-                            @icon('lock-closed', 'text-dark-muted text-xs')
-                        </span>
+                            <span class="input-group-addon">
+                                @icon('lock-closed', 'text-dark-muted text-xs')
+                            </span>
                             <input type="password" name="password" class="form-control" placeholder="Password">
                         </div>
                     </div>
