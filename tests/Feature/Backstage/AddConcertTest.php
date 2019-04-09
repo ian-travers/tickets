@@ -88,4 +88,29 @@ class AddConcertTest extends TestCase
         $response->assertRedirect('/login');
         $this->assertEquals(0, Concert::count());
     }
+
+    public function test_title_is_required()
+    {
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->from('/backstage/concerts/new')->post('/backstage/concerts', [
+            'title' => '',
+            'subtitle' => 'with Cruel Hand and Backtrack',
+            'additional_info' => "You must be 19 years of age to attend this concert.",
+            'date' => '2019-04-18',
+            'time' => '8:00pm',
+            'venue' => 'The Mosh Pit',
+            'venue_address' => '123 Fake St.',
+            'city' => 'Laraville',
+            'state' => 'ON',
+            'zip' => '123456',
+            'ticket_price' => '32.50',
+            'ticket_quantity' => '75',
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('/backstage/concerts/new');
+        $response->assertSessionHasErrors('title');
+        $this->assertEquals(0, Concert::count());
+    }
 }
