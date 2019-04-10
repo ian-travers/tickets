@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers\Backstage;
 
+use App\Concert;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 
 class ConcertController extends Controller
 {
+    public function index()
+    {
+        $concerts = Concert::all();
+
+        return view('backstage.concerts.index', compact('concerts'));
+    }
+
     public function create()
     {
         return view('backstage.concerts.create');
