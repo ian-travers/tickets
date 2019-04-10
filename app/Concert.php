@@ -21,6 +21,7 @@ use Illuminate\Database\Query\Builder;
  * @property string $state
  * @property string $zip
  * @property string $additional_info
+ * @property Carbon|null $published_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -47,6 +48,16 @@ class Concert extends Model
     public function scopePublished($query)
     {
         return $query->whereNotNull('published_at');
+    }
+
+    public function isPublished()
+    {
+        return $this->published_at !== null;
+    }
+
+    public function publish()
+    {
+        $this->update(['published_at' => $this->freshTimestamp()]);
     }
 
     public function getFormattedDateAttribute()

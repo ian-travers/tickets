@@ -28,6 +28,7 @@ class ConcertController extends Controller
             'ticket_quantity' => 'required|numeric|min:1',
         ]);
 
+        /** @var \App\Concert $concert */
         $concert = Auth::user()->concerts()->create([
             'title' => request('title'),
             'subtitle' => request('subtitle'),
@@ -43,6 +44,8 @@ class ConcertController extends Controller
             'zip' => request('zip'),
             'ticket_price' => request('ticket_price') * 100,
         ])->addTickets(request('ticket_quantity'));
+
+        $concert->publish();
 
         return redirect()->route('concerts.show', $concert);
     }
