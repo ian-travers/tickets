@@ -23,8 +23,11 @@ use Illuminate\Database\Query\Builder;
  * @property string $additional_info
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @property-read string $formatted_date
  * @property-read string $formatted_start_time
+ *
+ * @property User $user
  *
  * @method static Builder published()
  *
@@ -35,6 +38,11 @@ class Concert extends Model
     protected $guarded = ['id'];
 
     protected $dates = ['date'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function scopePublished($query)
     {

@@ -51,12 +51,27 @@ class AddConcertTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->actingAs($user)->post('/backstage/concerts', $this->validParams());
+        $response = $this->actingAs($user)->post('/backstage/concerts', [
+            'title' => 'No Warning',
+            'subtitle' => 'with Cruel Hand and Backtrack',
+            'additional_info' => "You must be 19 years of age to attend this concert.",
+            'date' => '2019-04-18',
+            'time' => '8:00pm',
+            'venue' => 'The Mosh Pit',
+            'venue_address' => '123 Fake St.',
+            'city' => 'Laraville',
+            'state' => 'ON',
+            'zip' => '123456',
+            'ticket_price' => '32.50',
+            'ticket_quantity' => '75',
+        ]);
 
         tap(Concert::first(), function ($concert) use ($response, $user) {
             /** @var Concert $concert */
             $response->assertStatus(302);
             $response->assertRedirect("/concerts/{$concert->id}");
+
+            $this->assertTrue($concert->user->is($user));
 
             $this->assertEquals('No Warning', $concert->title);
             $this->assertEquals('with Cruel Hand and Backtrack', $concert->subtitle);
@@ -106,6 +121,8 @@ class AddConcertTest extends TestCase
             $response->assertStatus(302);
             $response->assertRedirect("/concerts/{$concert->id}");
 
+            $this->assertTrue($concert->user->is($user));
+
             $this->assertNull($concert->subtitle);
         });
     }
@@ -122,6 +139,8 @@ class AddConcertTest extends TestCase
             /** @var Concert $concert */
             $response->assertStatus(302);
             $response->assertRedirect("/concerts/{$concert->id}");
+
+            $this->assertTrue($concert->user->is($user));
 
             $this->assertNull($concert->additional_info);
         });
