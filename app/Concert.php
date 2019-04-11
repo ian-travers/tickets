@@ -15,6 +15,7 @@ use Illuminate\Database\Query\Builder;
  * @property string $subtitle
  * @property Carbon $date
  * @property int $ticket_price
+ * @property int $ticket_quantity
  * @property string $venue
  * @property string $venue_address
  * @property string $city
