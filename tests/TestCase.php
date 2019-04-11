@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -21,5 +22,9 @@ abstract class TestCase extends BaseTestCase
         $this->setupDatabase();
 
         \Mockery::getConfiguration()->allowMockingNonExistentMethods(false);
+
+        TestResponse::macro('data', function ($key) {
+            return $this->original->getData()[$key];
+        });
     }
 }

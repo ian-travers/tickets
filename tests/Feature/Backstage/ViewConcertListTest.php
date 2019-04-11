@@ -5,7 +5,6 @@ namespace Tests\Feature\Backstage;
 use App\Concert;
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Testing\TestResponse;
 use PHPUnit\Framework\Assert;
 use Tests\TestCase;
 
@@ -14,10 +13,6 @@ class ViewConcertListTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        TestResponse::macro('data', function ($key) {
-            return $this->original->getData()[$key];
-        });
 
         Collection::macro('assertContains', function ($value) {
             Assert::assertTrue($this->contains($value), "Failed asserting that the collection contained the specified value");
