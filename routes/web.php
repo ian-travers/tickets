@@ -21,9 +21,11 @@ Route::group([
     'prefix' => 'backstage',
     'namespace' => 'Backstage'
 ], function () {
-    Route::get('/concerts', 'ConcertController@index');
-    Route::get('/concerts/new', 'ConcertController@create');
+    Route::get('/concerts', 'ConcertController@index')->name('backstage.concert.index');
+    Route::get('/concerts/new', 'ConcertController@create')->name('backstage.concert.new');
     Route::post('/concerts', 'ConcertController@store');
+    Route::get('/concerts/{id}/edit', 'ConcertController@edit')->name('backstage.concert.edit');
+    Route::patch('/concerts/{id}', 'ConcertController@update')->name('backstage.concert.update');
 });
 
 
