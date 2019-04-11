@@ -70,6 +70,10 @@ class ConcertController extends Controller
 
     public function update($id)
     {
+        $this->validate(request(), [
+            'title' => ['required'],
+        ]);
+
         /** @var \App\Concert $concert */
         $concert = Auth::user()->concerts()->findOrFail($id);
 
