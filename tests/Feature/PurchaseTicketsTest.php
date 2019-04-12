@@ -46,7 +46,8 @@ class PurchaseTicketsTest extends TestCase
         $this->assertArrayHasKey($field, $response->decodeResponseJson('errors'));
     }
 
-    public function test_customer_can_purchase_tickets_to_a_published_concert()
+    /** @test  */
+    function customer_can_purchase_tickets_to_a_published_concert()
     {
         OrderConfirmationNumber::shouldReceive('generate')->andReturn('ORDERCONFIRMATION1234');
         TicketCode::shouldReceive('generateFor')->andReturn('TICKETCODE1', 'TICKETCODE2', 'TICKETCODE3');
@@ -91,7 +92,8 @@ class PurchaseTicketsTest extends TestCase
         });
     }
 
-    public function test_cannot_purchase_tickets_to_an_unpublished_concert()
+    /** @test  */
+    function cannot_purchase_tickets_to_an_unpublished_concert()
     {
         /** @var Concert $concert */
         $concert = factory(Concert::class)->states('unpublished')->create()->addTickets(10);
@@ -107,7 +109,8 @@ class PurchaseTicketsTest extends TestCase
         $this->assertEquals(0, $this->paymentGateway->totalCharges());
     }
 
-    public function test_an_order_is_not_created_if_payment_fails()
+    /** @test  */
+    function an_order_is_not_created_if_payment_fails()
     {
         /** @var Concert $concert */
         $concert = factory(Concert::class)->states('published')->create(['ticket_price' => 3250])->addTickets(10);
@@ -123,7 +126,8 @@ class PurchaseTicketsTest extends TestCase
         $this->assertEquals(10, $concert->ticketsRemaining());
     }
 
-    public function test_cannot_purchase_more_tickets_then_remain()
+    /** @test  */
+    function cannot_purchase_more_tickets_then_remain()
     {
         /** @var Concert $concert */
         $concert = factory(Concert::class)->states('published')->create()->addTickets(50);
@@ -140,7 +144,8 @@ class PurchaseTicketsTest extends TestCase
         $this->assertEquals(50, $concert->ticketsRemaining());
     }
 
-    public function test_cannot_purchase_tickets_another_customer_is_already_trying_to_purchase()
+    /** @test  */
+    function cannot_purchase_tickets_another_customer_is_already_trying_to_purchase()
     {
                             // A RACE CONDITION
         // Find tickets for person A
@@ -183,7 +188,8 @@ class PurchaseTicketsTest extends TestCase
         $this->assertEquals(3, $concert->ordersFor('person_A@example.com')->first()->ticketQuantity());
     }
 
-    public function test_email_is_required_to_purchase_tickets()
+    /** @test  */
+    function email_is_required_to_purchase_tickets()
     {
         /** @var Concert $concert */
         $concert = factory(Concert::class)->states('published')->create()->addTickets(10);
@@ -196,7 +202,8 @@ class PurchaseTicketsTest extends TestCase
         $this->assertValidationError($response, 'email');
     }
 
-    public function test_email_must_be_valid_to_purchase_tickets()
+    /** @test  */
+    function email_must_be_valid_to_purchase_tickets()
     {
         /** @var Concert $concert */
         $concert = factory(Concert::class)->states('published')->create()->addTickets(10);
@@ -210,7 +217,8 @@ class PurchaseTicketsTest extends TestCase
         $this->assertValidationError($response, 'email');
     }
 
-    public function test_ticket_quantity_is_required_to_purchase_tickets()
+    /** @test  */
+    function ticket_quantity_is_required_to_purchase_tickets()
     {
         /** @var Concert $concert */
         $concert = factory(Concert::class)->states('published')->create()->addTickets(10);
@@ -223,7 +231,8 @@ class PurchaseTicketsTest extends TestCase
         $this->assertValidationError($response, 'ticket_quantity');
     }
 
-    public function test_ticket_quantity_must_be_least_1_to_purchase_tickets()
+    /** @test  */
+    function ticket_quantity_must_be_least_1_to_purchase_tickets()
     {
         /** @var Concert $concert */
         $concert = factory(Concert::class)->states('published')->create()->addTickets(10);
@@ -237,7 +246,8 @@ class PurchaseTicketsTest extends TestCase
         $this->assertValidationError($response, 'ticket_quantity');
     }
 
-    public function test_payment_token_is_required()
+    /** @test  */
+    function payment_token_is_required()
     {
         /** @var Concert $concert */
         $concert = factory(Concert::class)->states('published')->create()->addTickets(10);

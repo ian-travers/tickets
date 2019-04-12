@@ -10,7 +10,8 @@ use Tests\TestCase;
 
 class ViewOrderTest extends TestCase
 {
-    function test_user_can_view_their_order_confirmation()
+    /** @test  */
+    function user_can_view_their_order_confirmation()
     {
         /** @var Concert $concert */
         $concert = factory(Concert::class)->create([

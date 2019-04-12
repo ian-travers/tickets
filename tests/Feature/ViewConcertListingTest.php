@@ -8,7 +8,8 @@ use Tests\TestCase;
 
 class ViewConcertListingTest extends TestCase
 {
-    public function test_user_can_view_a_published_concert_listing()
+    /** @test  */
+    function user_can_view_a_published_concert_listing()
     {
         // Arrange | Организация
         // Create a concert
@@ -45,7 +46,8 @@ class ViewConcertListingTest extends TestCase
         $response->assertSee('For tickets, call (555) 555-5555');
     }
 
-    public function test_user_cannot_view_unpublished_concert()
+    /** @test  */
+    function user_cannot_view_unpublished_concert()
     {
         $concert = factory(Concert::class)->states('unpublished')->create();
 

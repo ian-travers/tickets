@@ -12,7 +12,8 @@ use Tests\TestCase;
 
 class ConcertTest extends TestCase
 {
-    public function test_can_get_formatted_date()
+    /** @test */
+    function can_get_formatted_date()
     {
         // Create a concert with a known date
         $concert = factory(Concert::class)->make([
@@ -23,7 +24,8 @@ class ConcertTest extends TestCase
         $this->assertEquals('March 10, 2019', $concert->formatted_date);
     }
 
-    public function test_can_get_formatted_start_time()
+    /** @test */
+    function can_get_formatted_start_time()
     {
         $concert = factory(Concert::class)->make([
             'date' => Carbon::parse('2019-03-10 17:00:00'),
@@ -32,7 +34,8 @@ class ConcertTest extends TestCase
         $this->assertEquals('5:00pm', $concert->formatted_start_time);
     }
 
-    public function test_can_get_ticket_price_in_dollars()
+    /** @test */
+    function can_get_ticket_price_in_dollars()
     {
         $concert = factory(Concert::class)->make([
             'ticket_price' => 6750,
@@ -41,7 +44,8 @@ class ConcertTest extends TestCase
         $this->assertEquals('67.50', $concert->ticket_price_in_dollars);
     }
 
-    public function test_concerts_with_a_published_at_date_are_published()
+    /** @test */
+    function concerts_with_a_published_at_date_are_published()
     {
         $publishedConcertA = factory(Concert::class)->state('published')->create();
         $publishedConcertB = factory(Concert::class)->state('published')->create();
@@ -54,19 +58,26 @@ class ConcertTest extends TestCase
         $this->assertFalse($publishedConcerts->contains($unpublishedConcert));
     }
 
-    public function test_concert_can_be_published()
+    /** @test */
+    function concert_can_be_published()
     {
         /** @var Concert $concert */
-        $concert = factory(Concert::class)->create(['published_at' => null]);
+        $concert = factory(Concert::class)->create([
+            'published_at' => null,
+            'ticket_quantity' => 5,
+        ]);
 
         $this->assertFalse($concert->isPublished());
+        $this->assertEquals(0, $concert->ticketsRemaining());
 
         $concert->publish();
 
         $this->assertTrue($concert->isPublished());
+        $this->assertEquals(5, $concert->ticketsRemaining());
     }
 
-    public function test_can_add_tickets()
+    /** @test */
+    function can_add_tickets()
     {
         /** @var Concert $concert */
         $concert = factory(Concert::class)->create();
@@ -76,7 +87,8 @@ class ConcertTest extends TestCase
         $this->assertEquals(50, $concert->ticketsRemaining());
     }
 
-    public function test_tickets_remaining_does_not_include_tickets_associated_with_an_order()
+    /** @test */
+    function tickets_remaining_does_not_include_tickets_associated_with_an_order()
     {
         /** @var Concert $concert */
         $concert = factory(Concert::class)->create();
@@ -87,7 +99,8 @@ class ConcertTest extends TestCase
         $this->assertEquals(20, $concert->ticketsRemaining());
     }
 
-    public function test_trying_to_reserve_more_tickets_than_remain_throws_an_exception()
+    /** @test */
+    function trying_to_reserve_more_tickets_than_remain_throws_an_exception()
     {
         /** @var Concert $concert */
         $concert = factory(Concert::class)->create()->addTickets(10);
@@ -104,7 +117,8 @@ class ConcertTest extends TestCase
 
     }
 
-    public function test_can_reserve_available_tickets()
+    /** @test */
+    function can_reserve_available_tickets()
     {
         /** @var Concert $concert */
         $concert = factory(Concert::class)->create()->addTickets(3);
@@ -118,7 +132,8 @@ class ConcertTest extends TestCase
         $this->assertEquals(1, $concert->ticketsRemaining());
     }
 
-    public function test_cannot_reserve_tickets_that_have_already_been_purchased()
+    /** @test */
+    function cannot_reserve_tickets_that_have_already_been_purchased()
     {
         /** @var Concert $concert */
         $concert = factory(Concert::class)->create()->addTickets(3);
@@ -137,15 +152,16 @@ class ConcertTest extends TestCase
         $this->fail("Резервирование билетов успешно, хотя билеты уже проданы");
     }
 
-    public function test_cannot_reserve_tickets_that_have_already_been_reserved()
+    /** @test */
+    function cannot_reserve_tickets_that_have_already_been_reserved()
     {
         /** @var Concert $concert */
         $concert = factory(Concert::class)->create()->addTickets(3);
 
-        $concert->reserveTickets(2,'jane@example.com');
+        $concert->reserveTickets(2, 'jane@example.com');
 
         try {
-            $concert->reserveTickets(2,'john@example.com');
+            $concert->reserveTickets(2, 'john@example.com');
         } catch (NotEnoughTicketsException $e) {
             $this->assertEquals(1, $concert->ticketsRemaining());
             return;

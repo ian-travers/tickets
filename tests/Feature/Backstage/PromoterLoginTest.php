@@ -8,14 +8,16 @@ use Tests\TestCase;
 
 class PromoterLoginTest extends TestCase
 {
-    public function test_showing_the_login_form()
+    /** @test  */
+    function showing_the_login_form()
     {
         $response = $this->get('/login');
 
         $response->assertStatus(200);
     }
 
-    public function test_logging_in_with_valid_credentials()
+    /** @test  */
+    function logging_in_with_valid_credentials()
     {
         $this->withoutExceptionHandling();
 
@@ -34,7 +36,8 @@ class PromoterLoginTest extends TestCase
         $this->assertTrue(Auth::user()->is($user));
     }
 
-    public function test_logging_in_with_invalid_credentials()
+    /** @test  */
+    function logging_in_with_invalid_credentials()
     {
         $this->withoutExceptionHandling();
 
@@ -55,7 +58,8 @@ class PromoterLoginTest extends TestCase
         $this->assertFalse(Auth::check());
     }
 
-    public function test_logging_in_with_an_account_that_does_not_exist()
+    /** @test  */
+    function logging_in_with_an_account_that_does_not_exist()
     {
         $this->withoutExceptionHandling();
 
@@ -71,7 +75,8 @@ class PromoterLoginTest extends TestCase
         $this->assertFalse(Auth::check());
     }
 
-    public function test_logging_out_the_current_user()
+    /** @test  */
+    function logging_out_the_current_user()
     {
         Auth::login(factory(User::class)->create());
 

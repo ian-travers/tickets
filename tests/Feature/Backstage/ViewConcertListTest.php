@@ -23,7 +23,8 @@ class ViewConcertListTest extends TestCase
         });
     }
 
-    public function test_guests_cannot_view_a_promoters_concert_list()
+    /** @test  */
+    function guests_cannot_view_a_promoters_concert_list()
     {
         $response = $this->get('/backstage/concerts');
 
@@ -31,7 +32,8 @@ class ViewConcertListTest extends TestCase
         $response->assertRedirect('/login');
     }
 
-    public function test_promoters_can_only_view_a_list_of_their_own_concerts()
+    /** @test  */
+    function promoters_can_only_view_a_list_of_their_own_concerts()
     {
         $this->withoutExceptionHandling();
 
