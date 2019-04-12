@@ -4,6 +4,7 @@
 namespace Tests\Unit;
 
 use App\Concert;
+use App\ConcertFactory;
 use App\Order;
 use App\Exceptions\NotEnoughTicketsException;
 use App\Ticket;
@@ -77,17 +78,6 @@ class ConcertTest extends TestCase
     }
 
     /** @test */
-    function can_add_tickets()
-    {
-        /** @var Concert $concert */
-        $concert = factory(Concert::class)->create();
-
-        $concert->addTickets(50);
-
-        $this->assertEquals(50, $concert->ticketsRemaining());
-    }
-
-    /** @test */
     function tickets_remaining_does_not_include_tickets_associated_with_an_order()
     {
         /** @var Concert $concert */
@@ -103,7 +93,7 @@ class ConcertTest extends TestCase
     function trying_to_reserve_more_tickets_than_remain_throws_an_exception()
     {
         /** @var Concert $concert */
-        $concert = factory(Concert::class)->create()->addTickets(10);
+        $concert = ConcertFactory::createPublished(['ticket_quantity' => 10]);
 
         try {
             $reservation = $concert->reserveTickets(11, 'jane@example.com');
@@ -121,7 +111,7 @@ class ConcertTest extends TestCase
     function can_reserve_available_tickets()
     {
         /** @var Concert $concert */
-        $concert = factory(Concert::class)->create()->addTickets(3);
+        $concert = ConcertFactory::createPublished(['ticket_quantity' => 3]);
 
         $this->assertEquals(3, $concert->ticketsRemaining());
 
@@ -156,7 +146,7 @@ class ConcertTest extends TestCase
     function cannot_reserve_tickets_that_have_already_been_reserved()
     {
         /** @var Concert $concert */
-        $concert = factory(Concert::class)->create()->addTickets(3);
+        $concert = ConcertFactory::createPublished(['ticket_quantity' => 3]);
 
         $concert->reserveTickets(2, 'jane@example.com');
 
