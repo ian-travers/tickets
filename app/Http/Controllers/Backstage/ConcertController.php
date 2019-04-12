@@ -54,7 +54,7 @@ class ConcertController extends Controller
             'ticket_quantity' => (int)request('ticket_quantity'),
         ]);
 
-        $concert->update(['published_at' => $concert->freshTimestamp()]);
+        $concert->publish();
 
         return redirect()->route('concerts.show', $concert);
     }
