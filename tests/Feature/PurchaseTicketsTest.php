@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Billing\PaymentGatewayInterface;
 use App\Concert;
+use App\ConcertFactory;
 use App\Facades\OrderConfirmationNumber;
 use App\Facades\TicketCode;
 use App\Mail\OrderConfirmationEmail;
@@ -55,7 +56,7 @@ class PurchaseTicketsTest extends TestCase
         // Create a concert
 
         /** @var Concert $concert */
-        $concert = factory(Concert::class)->states('published')->create(['ticket_price' => 3250])->addTickets(3);
+        $concert = ConcertFactory::createPublished(['ticket_price' => 3250, 'ticket_quantity' => 3]);
 
         // Act. Purchase concert tickets
         $response = $this->orderTickets($concert, [
