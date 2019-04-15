@@ -28,4 +28,5 @@ Route::group([
     Route::patch('/concerts/{id}', 'ConcertController@update')->name('backstage.concert.update');
 });
 
+Route::post('/backstage/published-concerts', 'Backstage\PublishedConcertController@store');
 
