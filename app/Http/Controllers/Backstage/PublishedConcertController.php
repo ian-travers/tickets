@@ -9,7 +9,7 @@ class PublishedConcertController extends Controller
 {
     public function store()
     {
-        $concert = Concert::find(request('concert_id'));
+        $concert = Concert::findOrFail(request('concert_id'));
 
         if ($concert->isPublished()) {
             abort(422);

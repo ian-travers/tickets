@@ -26,7 +26,7 @@ Route::group([
     Route::post('/concerts', 'ConcertController@store');
     Route::get('/concerts/{id}/edit', 'ConcertController@edit')->name('backstage.concert.edit');
     Route::patch('/concerts/{id}', 'ConcertController@update')->name('backstage.concert.update');
+    Route::post('/published-concerts', 'PublishedConcertController@store');
 });
 
-Route::post('/backstage/published-concerts', 'Backstage\PublishedConcertController@store');
 
