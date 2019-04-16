@@ -11,9 +11,10 @@ class ConcertController extends Controller
 {
     public function index()
     {
-        $concerts = Auth::user()->concerts;
+        $publishedConcerts = Auth::user()->concerts->filter->isPublished();
+        $unpublishedConcerts = Auth::user()->concerts->reject->isPublished();
 
-        return view('backstage.concerts.index', compact('concerts'));
+        return view('backstage.concerts.index', compact('publishedConcerts', 'unpublishedConcerts'));
     }
 
     public function create()
