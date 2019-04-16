@@ -1,5 +1,6 @@
 <?php
 
+use App\Concert;
 use App\ConcertFactory;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -44,5 +45,7 @@ class DatabaseSeeder extends Seeder
             'ticket_price' => 5500,
             'ticket_quantity' => 10
         ]);
+
+        factory(Concert::class)->create(['user_id' => $user->id]);
     }
 }

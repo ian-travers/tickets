@@ -23,7 +23,7 @@
         <div class="container">
             <div class="flex-spaced flex-y-center">
                 <h1 class="text-lg">Your concerts</h1>
-                <a href="{{ route('backstage.concerts.new') }}" class="btn btn-primary">Add concert</a>
+                <a href="{{ route('backstage.concert.new') }}" class="btn btn-primary">Add concert</a>
             </div>
         </div>
     </div>
@@ -87,10 +87,10 @@
                                         </p>
                                     </div>
                                     <div>
-                                        <a href="{{ route('backstage.concerts.edit', $concert) }}"
+                                        <a href="{{ route('backstage.concert.edit', $concert) }}"
                                            class="btn btn-sm btn-secondary m-xs-r-2">Edit</a>
                                         <form class="inline-block"
-                                              action="{{ route('backstage.published-concerts.store') }}" method="POST">
+                                              action="{{ route('backstage.published-concert.store') }}" method="POST">
                                             @csrf
                                             <input type="hidden" name="concert_id" value="{{ $concert->id }}">
                                             <button type="submit" class="btn btn-sm btn-primary">Publish</button>
