@@ -1,5 +1,7 @@
 <?php
 
+use App\ConcertFactory;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,7 +19,7 @@ class DatabaseSeeder extends Seeder
             'user_id' => $user->id,
             'title' => 'The Red Chord',
             'subtitle' => 'with Animosity and Lethargy',
-            'additional_information' => 'This concert is 19+.',
+            'additional_info' => 'This concert is 19+.',
             'venue' => 'The Mosh Pit',
             'venue_address' => '123 Example Lane',
             'city' => 'Laraville',
@@ -32,7 +34,7 @@ class DatabaseSeeder extends Seeder
             'user_id' => $user->id,
             'title' => 'Slayer',
             'subtitle' => 'with Forbidden and Testament',
-            'additional_information' => null,
+            'additional_info' => null,
             'venue' => 'The Rock Pile',
             'venue_address' => '55 Sample Blvd',
             'city' => 'Laraville',
