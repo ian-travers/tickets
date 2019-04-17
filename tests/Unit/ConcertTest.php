@@ -122,7 +122,7 @@ class ConcertTest extends TestCase
         $concert->tickets()->saveMany(factory(Ticket::class, 2)->create(['order_id' => 1]));
         $concert->tickets()->saveMany(factory(Ticket::class, 5)->create(['order_id' => null]));
 
-        $this->assertEquals(0.28571, $concert->percentSoldOut(), '', 0.00001);
+        $this->assertEquals(28.57, $concert->percentSoldOut());
     }
 
     /** @test */

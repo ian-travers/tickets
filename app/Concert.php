@@ -143,6 +143,6 @@ class Concert extends Model
 
     public function percentSoldOut()
     {
-        return $this->ticketsSold() / $this->totalTickets();
+        return number_format(($this->ticketsSold() / $this->totalTickets()) * 100, 2);
     }
 }
