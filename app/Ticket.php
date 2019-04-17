@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Concert $concert
  *
  * @method static Builder available()
+ * @method static Builder sold()
  *
  * @package App
  */
