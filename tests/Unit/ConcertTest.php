@@ -114,6 +114,24 @@ class ConcertTest extends TestCase
     }
 
     /** @test */
+    function calculating_the_revenue_in_dollars()
+    {
+        /** @var Concert $concert */
+        $concert = factory(Concert::class)->create();
+
+        /** @var Order $orderA */
+        $orderA = factory(Order::class)->create(['amount' => 3850]);
+
+        /** @var Order $orderB */
+        $orderB = factory(Order::class)->create(['amount' => 9625]);
+
+        $concert->tickets()->saveMany(factory(Ticket::class, 2)->create(['order_id' => $orderA->id]));
+        $concert->tickets()->saveMany(factory(Ticket::class, 5)->create(['order_id' => $orderB->id]));
+
+        $this->assertEquals(134.75, $concert->revenueInDollars());
+    }
+
+    /** @test */
     function calculating_percentage_of_tickets_sold()
     {
         /** @var Concert $concert */
