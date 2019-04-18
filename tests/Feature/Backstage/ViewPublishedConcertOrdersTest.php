@@ -22,6 +22,24 @@ class ViewPublishedConcertOrdersTest extends TestCase
         /** @var Concert $concert */
         $concert = ConcertFactory::createPublished(['user_id' => $user->id]);
 
+        $response = $this->actingAs($user)->get("/backstage/published-concerts/{$concert->id}/orders");
+
+        $response->assertStatus(200);
+        $response->assertViewIs('backstage.published-concert-orders.index');
+        $this->assertTrue($response->data('concert')->is($concert));
+    }
+
+    /** @test */
+    function a_promoter_can_view_the_10_most_recent_orders_for_their_concert()
+    {
+        $this->withoutExceptionHandling();
+
+        /** @var User $user */
+        $user = factory(User::class)->create();
+
+        /** @var Concert $concert */
+        $concert = ConcertFactory::createPublished(['user_id' => $user->id]);
+
         $oldOrder = OrderFactory::createForConcert($concert, ['created_at' => Carbon::parse('-11 days')]);
         $recentOrder1 = OrderFactory::createForConcert($concert, ['created_at' => Carbon::parse('10 days ago')]);
         $recentOrder2 = OrderFactory::createForConcert($concert, ['created_at' => Carbon::parse('9 days ago')]);
@@ -35,10 +53,6 @@ class ViewPublishedConcertOrdersTest extends TestCase
         $recentOrder10 = OrderFactory::createForConcert($concert, ['created_at' => Carbon::parse('1 days ago')]);
 
         $response = $this->actingAs($user)->get("/backstage/published-concerts/{$concert->id}/orders");
-
-        $response->assertStatus(200);
-        $response->assertViewIs('backstage.published-concert-orders.index');
-        $this->assertTrue($response->data('concert')->is($concert));
 
         $response->data('orders')->assertNotContains($oldOrder);
         $response->data('orders')->assertEquals([
