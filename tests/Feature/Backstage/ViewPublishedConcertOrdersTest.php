@@ -4,7 +4,9 @@ namespace Tests\Feature\Backstage;
 
 use App\Concert;
 use App\ConcertFactory;
+use App\OrderFactory;
 use App\User;
+use Carbon\Carbon;
 use Tests\TestCase;
 
 class ViewPublishedConcertOrdersTest extends TestCase
@@ -19,6 +21,10 @@ class ViewPublishedConcertOrdersTest extends TestCase
 
         /** @var Concert $concert */
         $concert = ConcertFactory::createPublished(['user_id' => $user->id]);
+
+        $order = OrderFactory::createForConcert($concert, ['created_at' => Carbon::parse('-11 days')]);
+
+        dd($order->load('tickets'));
 
         $response = $this->actingAs($user)->get("/backstage/published-concerts/{$concert->id}/orders");
 
