@@ -28,6 +28,8 @@ Route::group([
     Route::patch('/concerts/{id}', 'ConcertController@update')->name('backstage.concert.update');
     Route::post('/published-concerts', 'PublishedConcertController@store')->name('backstage.published-concert.store');
     Route::get('/published-concerts/{id}/orders', 'PublishedConcertOrdersController@index')->name('backstage.published-concert-orders.index');
+
+    Route::get('/concerts/{id}/messages/new', 'ConcertMessagesController@create')->name('backstage.concert-messages.new');
 });
 
 
