@@ -2,6 +2,7 @@
 
 use App\Concert;
 use App\ConcertFactory;
+use App\OrderFactory;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
@@ -31,7 +32,7 @@ class DatabaseSeeder extends Seeder
             'ticket_quantity' => 10
         ]);
 
-        ConcertFactory::createPublished([
+        $concert = ConcertFactory::createPublished([
             'user_id' => $user->id,
             'title' => 'Slayer',
             'subtitle' => 'with Forbidden and Testament',
@@ -43,8 +44,18 @@ class DatabaseSeeder extends Seeder
             'zip' => '19276',
             'date' => Carbon::parse('2019-04-16 7:00pm'),
             'ticket_price' => 5500,
-            'ticket_quantity' => 10
+            'ticket_quantity' => 13
         ]);
+
+        OrderFactory::createForConcert($concert,[
+            'created_at' => Carbon::parse('2019-04-14 9:36pm'),
+            'amount' => $concert->ticket_price * 3,
+
+        ], 3);
+        OrderFactory::createForConcert($concert,[
+            'created_at' => Carbon::parse('2019-04-14 10:11pm'),
+            'amount' => $concert->ticket_price * 2,
+        ], 2);
 
         factory(Concert::class)->create(['user_id' => $user->id]);
     }
