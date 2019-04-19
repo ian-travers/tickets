@@ -11,7 +11,8 @@ use Tests\TestCase;
 
 class ReservationTest extends TestCase
 {
-    public function test_calculating_the_total_cost()
+    /** @test */
+    function calculating_the_total_cost()
     {
         /** @var Concert $concert */
 //        $concert = factory(Concert::class)->create(['ticket_price' => 1200])->addTickets(5);
@@ -30,7 +31,8 @@ class ReservationTest extends TestCase
         $this->assertEquals(6000, $reservation->totalCost());
     }
 
-    public function test_retrieving_the_reservation_tickets()
+    /** @test */
+    function retrieving_the_reservation_tickets()
     {
         $tickets = collect([
             (object)['price' => 1200],
@@ -43,14 +45,16 @@ class ReservationTest extends TestCase
         $this->assertEquals($tickets, $reservation->tickets());
     }
 
-    public function test_retrieving_the_customer_email()
+    /** @test */
+    function retrieving_the_customer_email()
     {
         $reservation = new Reservation(collect(), 'john@example.com');
 
         $this->assertEquals('john@example.com', $reservation->email());
     }
 
-    public function test_reserved_tickets_are_released_when_a_reservation_is_cancelled()
+    /** @test */
+    function reserved_tickets_are_released_when_a_reservation_is_cancelled()
     {
         $tickets = collect([
             \Mockery::spy(Ticket::class),
@@ -67,7 +71,8 @@ class ReservationTest extends TestCase
         }
     }
 
-    public function test_completing_the_reservation()
+    /** @test */
+    function completing_the_reservation()
     {
         /** @var Concert $concert */
         $concert = factory(Concert::class)->create(['ticket_price' => 1200]);

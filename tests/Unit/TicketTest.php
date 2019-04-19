@@ -9,7 +9,8 @@ use Tests\TestCase;
 
 class TicketTest extends TestCase
 {
-    public function test_a_ticket_can_be_reserved()
+    /** @test */
+    function a_ticket_can_be_reserved()
     {
         $ticket = factory(Ticket::class)->create();
 
@@ -20,7 +21,8 @@ class TicketTest extends TestCase
         $this->assertNotNull($ticket->fresh()->reserved_at);
     }
 
-    public function test_a_ticket_can_be_released()
+    /** @test */
+    function a_ticket_can_be_released()
     {
         /** @var Ticket $ticket */
         $ticket = factory(Ticket::class)->states('reserved')->create();
@@ -34,7 +36,8 @@ class TicketTest extends TestCase
 
     }
 
-    public function test_ticket_can_be_claimed_for_an_order()
+    /** @test */
+    function ticket_can_be_claimed_for_an_order()
     {
         /** @var Order $order */
         $order = factory(Order::class)->create();

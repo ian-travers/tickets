@@ -9,7 +9,8 @@ use Tests\TestCase;
 
 class HashidsTicketCodeGeneratorTest extends TestCase
 {
-    public function test_ticket_code_at_least_6_characters_long()
+    /** @test */
+    function ticket_code_at_least_6_characters_long()
     {
         /** @var TicketCodeGeneratorInterface $ticketCodeGenerator */
         $ticketCodeGenerator = new HashidsTicketCodeGenerator('testsalt1');
@@ -19,7 +20,8 @@ class HashidsTicketCodeGeneratorTest extends TestCase
         $this->assertTrue(strlen($code) >= 6);
     }
 
-    public function test_ticket_code_can_only_contain_uppercase_letters()
+    /** @test */
+    function ticket_code_can_only_contain_uppercase_letters()
     {
         /** @var TicketCodeGeneratorInterface $ticketCodeGenerator */
         $ticketCodeGenerator = new HashidsTicketCodeGenerator('testsalt1');
@@ -29,7 +31,8 @@ class HashidsTicketCodeGeneratorTest extends TestCase
         $this->assertRegExp('/^[A-Z]+$/', $code);
     }
 
-    public function test_ticket_code_the_same_ticket_id_are_the_same()
+    /** @test */
+    function ticket_code_the_same_ticket_id_are_the_same()
     {
         /** @var TicketCodeGeneratorInterface $ticketCodeGenerator */
         $ticketCodeGenerator = new HashidsTicketCodeGenerator('testsalt1');
@@ -40,7 +43,8 @@ class HashidsTicketCodeGeneratorTest extends TestCase
         $this->assertEquals($code1, $code2);
     }
 
-    public function test_ticket_code_for_different_ticket_id_are_different()
+    /** @test */
+    function ticket_code_for_different_ticket_id_are_different()
     {
         /** @var TicketCodeGeneratorInterface $ticketCodeGenerator */
         $ticketCodeGenerator = new HashidsTicketCodeGenerator('testsalt1');
@@ -51,7 +55,8 @@ class HashidsTicketCodeGeneratorTest extends TestCase
         $this->assertNotEquals($code1, $code2);
     }
 
-    public function test_ticket_codes_generated_with_different_salts_are_different()
+    /** @test */
+    function ticket_codes_generated_with_different_salts_are_different()
     {
         /** @var TicketCodeGeneratorInterface $ticketCodeGenerator1 */
         $ticketCodeGenerator1 = new HashidsTicketCodeGenerator('testsalt1');

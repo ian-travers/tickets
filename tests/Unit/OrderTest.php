@@ -9,7 +9,8 @@ use Tests\TestCase;
 
 class OrderTest extends TestCase
 {
-    public function test_create_order_from_tickets_email_and_charge()
+    /** @test */
+    function create_order_from_tickets_email_and_charge()
     {
         $charge = new Charge(['amount' => 3600, 'card_last_four' => '1234']);
 
@@ -28,7 +29,8 @@ class OrderTest extends TestCase
         $tickets->each->shouldHaveReceived('claimFor', [$order]);
     }
 
-    public function test_retrieving_an_order_by_confirmation_number()
+    /** @test */
+    function retrieving_an_order_by_confirmation_number()
     {
         /** @var Order $order */
         $order = factory(Order::class)->create([
@@ -43,16 +45,19 @@ class OrderTest extends TestCase
     }
 
     /**
+     * @test
+     *
      * @expectedException \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function test_retrieving_a_nonexistent_order_by_confirmation_number_throws_an_exception()
+    function retrieving_a_nonexistent_order_by_confirmation_number_throws_an_exception()
     {
         Order::findByConfirmationNumber('NONEXISTINGCONFIRMATIONNUMBER');
 
         $this->fail('No matching order was found for the specified confirmation number, but an exception was not thrown');
     }
 
-    public function test_converting_to_an_array()
+    /** @test */
+    function converting_to_an_array()
     {
         /** @var Order $order */
         $order = factory(Order::class)->create([

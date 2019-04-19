@@ -14,7 +14,8 @@ class FakePaymentGatewayTest extends TestCase
         return new FakePaymentGateway();
     }
 
-    public function test_running_a_hook_before_the_first_charge()
+    /** @test */
+    function running_a_hook_before_the_first_charge()
     {
         $paymentGateway = $this->getPaymentGateway();
 

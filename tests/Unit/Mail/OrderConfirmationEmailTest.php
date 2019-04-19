@@ -8,7 +8,8 @@ use Tests\TestCase;
 
 class OrderConfirmationEmailTest extends TestCase
 {
-    public function test_email_contains_a_link_to_order_comfirmation_page()
+    /** @test */
+    function email_contains_a_link_to_order_comfirmation_page()
     {
         $order = factory(Order::class)->make([
             'confirmation_number' => 'ORDERCONFIRMATION1234',
@@ -20,7 +21,8 @@ class OrderConfirmationEmailTest extends TestCase
         $this->assertContains(url('/orders/ORDERCONFIRMATION1234'), $rendered);
     }
 
-    public function test_email_has_a_subject()
+    /** @test */
+    function email_has_a_subject()
     {
         $order = factory(Order::class)->make();
         $email = new OrderConfirmationEmail($order);

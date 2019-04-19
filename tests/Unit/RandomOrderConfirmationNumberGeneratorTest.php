@@ -14,8 +14,8 @@ class RandomOrderConfirmationNumberGeneratorTest extends TestCase
     // All order confirmation numbers must be unique
     // ABCDEFGHJKMNPQRSTUVWXYZ
     // 23456789
-
-    function test_must_be_24_characters_long()
+    /** @test */
+    function must_be_24_characters_long()
     {
         $generator = new RandomOrderConfirmationNumberGenerator();
 
@@ -24,7 +24,8 @@ class RandomOrderConfirmationNumberGeneratorTest extends TestCase
         $this->assertEquals(24, strlen($confirmationNumber));
     }
 
-    function test_can_only_contain_uppercase_letters_and_numbers()
+    /** @test */
+    function can_only_contain_uppercase_letters_and_numbers()
     {
         $generator = new RandomOrderConfirmationNumberGenerator();
 
@@ -33,7 +34,8 @@ class RandomOrderConfirmationNumberGeneratorTest extends TestCase
         $this->assertRegExp('/^[A-Z0-9]+$/', $confirmationNumber);
     }
 
-    function test_cannot_contain_ambiguous_characters()
+    /** @test */
+    function cannot_contain_ambiguous_characters()
     {
         $generator = new RandomOrderConfirmationNumberGenerator();
 
@@ -45,7 +47,7 @@ class RandomOrderConfirmationNumberGeneratorTest extends TestCase
         $this->assertFalse(strpos($confirmationNumber, 'O'));
     }
 
-    function test_confirmation_numbers_must_be_unique()
+    function confirmation_numbers_must_be_unique()
     {
         $generator = new RandomOrderConfirmationNumberGenerator();
 
