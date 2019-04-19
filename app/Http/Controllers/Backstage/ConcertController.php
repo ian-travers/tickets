@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backstage;
 
 use App\Concert;
+use App\NullFile;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -35,7 +36,10 @@ class ConcertController extends Controller
             'zip' => 'required',
             'ticket_price' => 'required|numeric|min:5',
             'ticket_quantity' => 'required|numeric|min:1',
+            'poster_image' => 'nullable|image|dimensions:min_width=400,ratio=8.5/11',
         ]);
+
+//        dd(request('poster_image')->store('posters', 's3'));
 
         $concert = Auth::user()->concerts()->create([
             'title' => request('title'),
@@ -52,7 +56,7 @@ class ConcertController extends Controller
             'zip' => request('zip'),
             'ticket_price' => request('ticket_price') * 100,
             'ticket_quantity' => (int)request('ticket_quantity'),
-            'poster_image_path' => request('poster_image')->store('posters', 's3'),
+            'poster_image_path' => request('poster_image', new NullFile())->store('posters', 's3'),
         ]);
 
         return redirect()->route('backstage.concert.index');
