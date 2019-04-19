@@ -6,6 +6,8 @@
         <h1 class="text-lg">Edit concert</h1>
     </div>
 </div>
+
+@php /** @var \App\Concert $concert */ @endphp
 <form class="bg-soft p-xs-y-5" action="{{ route('backstage.concert.update', $concert) }}" method="POST">
 
     @csrf
@@ -14,14 +16,12 @@
     @if ($errors->any())
         <div class="container m-xs-b-4">
             <div class="alert alert-danger">
-                <h2 class="text-base text-danger wt-bold m-xs-b-2">
-                    There {{ $errors->count() == 1 ? 'is' : 'are' }} {{ $errors->count() }} {{ Illuminate\Support\Str::plural('error', $errors->count() )}}
-                    with this concert:
-                </h2>
+                <h2 class="text-base text-danger wt-bold m-xs-b-2">There {{ $errors->count() == 1 ? 'is' : 'are' }} {{ $errors->count() }} {{ Illuminate\Support\Str::plural('error', $errors->count() )}} with this concert:</h2>
                 <ul class="bullet-list text-danger">
 
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
+
                     @endforeach
                 </ul>
             </div>
@@ -34,8 +34,7 @@
                 <div class="col col-lg-4">
                     <div class="p-xs-y-4">
                         <h2 class="text-base wt-medium m-xs-b-4">Concert Details</h2>
-                        <p class="text-dark-soft text-sm m-xs-b-4">Tell us who's playing! <em>(Please be
-                                Slayer!)</em></p>
+                        <p class="text-dark-soft text-sm m-xs-b-4">Tell us who's playing! <em>(Please be Slayer!)</em></p>
                         <p class="text-dark-soft text-sm">Include the headliner in the concert name, use the subtitle section to list any opening bands, and add any important information to the description.</p>
                     </div>
                 </div>
@@ -180,7 +179,7 @@
                                     <div class="form-group {{ $errors->first('ticket_quantity', 'has-error') }}">
                                         <label class="form-label">Ticket Quantity</label>
                                         <input name="ticket_quantity" class="form-control" placeholder="250"
-                                               value="{{ old('ticket_quantity', $concert->tickets()->count()) }}">
+                                               value="{{ old('ticket_quantity', $concert->ticket_quantity) }}">
                                     </div>
                                 </div>
                             </div>

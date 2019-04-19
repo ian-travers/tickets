@@ -6,27 +6,24 @@
         <h1 class="text-lg">Add a concert</h1>
     </div>
 </div>
-<form class="bg-soft p-xs-y-5" action="/backstage/concerts" method="POST">
+<form class="bg-soft p-xs-y-5" action="/backstage/concerts" method="POST" enctype="multipart/form-data">
 
     @csrf
-
     @if ($errors->any())
         <div class="container m-xs-b-4">
             <div class="alert alert-danger">
-                <h2 class="text-base text-danger wt-bold m-xs-b-2">
-                    There {{ $errors->count() == 1 ? 'is' : 'are' }} {{ $errors->count() }} {{ str_plural('error', $errors->count() )}}
-                    with
-                    this concert:
-                </h2>
+                <h2 class="text-base text-danger wt-bold m-xs-b-2">There {{ $errors->count() == 1 ? 'is' : 'are' }} {{ $errors->count() }} {{ Illuminate\Support\Str::plural('error', $errors->count() )}} with this concert:</h2>
                 <ul class="bullet-list text-danger">
+
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
+
                     @endforeach
                 </ul>
             </div>
         </div>
-    @endif
 
+    @endif
     <div class="border-b p-xs-b-4 m-xs-b-4">
         <div class="container">
             <div class="row">
@@ -166,6 +163,28 @@
                                         <input name="ticket_quantity" class="form-control" placeholder="250" value="{{ old('ticket_quantity') }}">
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="border-b p-xs-b-4 m-xs-b-4">
+        <div class="container">
+            <div class="row">
+                <div class="col col-lg-4">
+                    <div class="p-xs-y-4">
+                        <h2 class="text-base wt-medium m-xs-b-4">Concert Poster</h2>
+                        <p class="text-dark-soft text-sm">Have a sweet poster for this concert? Upload it here and it'll be included on the checkout page.</p>
+                    </div>
+                </div>
+                <div class="col col-lg-8">
+                    <div class="card">
+                        <div class="card-section">
+                            <div class="form-group {{ $errors->first('poster_image', 'has-error') }}">
+                                <label class="form-label m-xs-b-2">Poster Image</label>
+                                <input type="file" name="poster_image" class="form-control-file">
                             </div>
                         </div>
                     </div>
