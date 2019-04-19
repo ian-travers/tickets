@@ -10,8 +10,10 @@
                     <span class="wt-normal text-dark-soft text-base">{{ $concert->formatted_date }}</span>
                 </h1>
                 <div class="text-base">
-                    <a href="{{ route('backstage.published-concert-orders.index', $concert) }}" class="inline-block m-xs-r-4">Orders</a>
-                    <a href="{{ route('backstage.concert-messages.new', $concert) }}" class="wt-bold inline-block">Message Attendees</a>
+                    <a href="{{ route('backstage.published-concert-orders.index', $concert) }}"
+                       class="inline-block m-xs-r-4">Orders</a>
+                    <a href="{{ route('backstage.concert-messages.new', $concert) }}" class="wt-bold inline-block">Message
+                        Attendees</a>
                 </div>
             </div>
         </div>
@@ -22,25 +24,43 @@
                 <h1 class="text-xl wt-light text-center m-xs-b-4 text-dark">New Message</h1>
 
                 @if (session()->has('flash'))
-                    <div class="alert alert-success m-xs-b-4">Message sent!</div>
+                    <div class="alert alert-success m-xs-b-4">
+                        {{ session('flash') }}
+                    </div>
 
                 @endif
                 <div class="card p-xs-6">
-                    <form action="#" method="POST">
-                        {{ csrf_field() }}
-                        <div class="form-group">
+                    <form action="{{ route('backstage.concert-messages.store', $concert) }}" method="POST">
+
+                        @csrf
+                        <div class="form-group {{ $errors->first('subject', 'has-error')}}">
                             <label class="form-label">Subject</label>
-                            <input name="subject" class="form-control" required>
+                            <input name="subject" class="form-control" value="{{ old('subject') }}">
+
+                            @if($errors->has('message'))
+                                <p class="help-block">
+                                    {{ $errors->first('subject') }}
+                                </p>
+
+                            @endif
                         </div>
-                        <div class="form-group">
+                        <div class="form-group {{ $errors->first('message', 'has-error')}}">
                             <label class="form-label">Message</label>
-                            <textarea class="form-control" name="message" rows="10" required></textarea>
+                            <textarea class="form-control" name="message" rows="10">{{ old('message') }}</textarea>
+
+                            @if($errors->has('message'))
+                                <p class="help-block">
+                                    {{ $errors->first('message') }}
+                                </p>
+
+                            @endif
                         </div>
                         <div>
                             <button class="btn btn-primary btn-block text-smooth">Send Now</button>
                         </div>
                     </form>
                 </div>
+
             </div>
         </div>
     </div>
