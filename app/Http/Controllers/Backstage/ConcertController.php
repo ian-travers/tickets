@@ -35,6 +35,7 @@ class ConcertController extends Controller
             'zip' => 'required',
             'ticket_price' => 'required|numeric|min:5',
             'ticket_quantity' => 'required|numeric|min:1',
+            'poster_image' => 'image|dimensions:min_width=400,ratio=8.5/11',
         ]);
 
 //        dd(request('poster_image')->store('posters', 's3'));
