@@ -37,7 +37,6 @@ class ConcertController extends Controller
             'ticket_quantity' => 'required|numeric|min:1',
         ]);
 
-        /** @var \App\Concert $concert */
         $concert = Auth::user()->concerts()->create([
             'title' => request('title'),
             'subtitle' => request('subtitle'),
@@ -53,6 +52,7 @@ class ConcertController extends Controller
             'zip' => request('zip'),
             'ticket_price' => request('ticket_price') * 100,
             'ticket_quantity' => (int)request('ticket_quantity'),
+            'poster_image_path' => request('poster_image')->store('posters', 's3'),
         ]);
 
         return redirect()->route('backstage.concert.index');
