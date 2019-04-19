@@ -2,10 +2,10 @@
 
 namespace App\Mail;
 
+use App\AttendeeMessage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class AttendeeMessageEmail extends Mailable
 {
@@ -16,9 +16,9 @@ class AttendeeMessageEmail extends Mailable
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param AttendeeMessage $attendeeMessage
      */
-    public function __construct($attendeeMessage)
+    public function __construct(AttendeeMessage $attendeeMessage)
     {
         $this->attendeeMessage = $attendeeMessage;
     }
@@ -30,6 +30,7 @@ class AttendeeMessageEmail extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->subject($this->attendeeMessage->subject)
+            ->text('emails.attendee-message-email');
     }
 }
