@@ -4,8 +4,10 @@ namespace Tests\Feature\Backstage;
 
 use App\Concert;
 use App\User;
+use App\Events\ConcertAdded;
 use Carbon\Carbon;
 use Illuminate\Http\Testing\File;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -429,6 +431,22 @@ class AddConcertTest extends TestCase
             $response->assertRedirect('/backstage/concerts');
             $this->assertTrue($concert->user->is($user));
             $this->assertNull($concert->post_image_path);
+        });
+    }
+
+    /** @test */
+    function an_event_is_fired_when_a_concert_is_added()
+    {
+        $this->withoutExceptionHandling();
+
+        Event::fake([ConcertAdded::class]);
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->post('/backstage/concerts', $this->validParams());
+
+        Event::assertDispatched(ConcertAdded::class, function($event) {
+            $concert = Concert::firstOrFail();
+            return $event->concert->is($concert);
         });
     }
 }
