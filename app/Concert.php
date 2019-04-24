@@ -22,6 +22,7 @@ use Illuminate\Database\Query\Builder;
  * @property string $state
  * @property string $zip
  * @property string $additional_info
+ * @property string|null $poster_image_path
  * @property Carbon|null $published_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
