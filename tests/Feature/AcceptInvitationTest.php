@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Invitation;
 use App\User;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class AcceptInvitationTest extends TestCase
@@ -44,6 +45,62 @@ class AcceptInvitationTest extends TestCase
         $response = $this->get('/invitations/TESTCODE1234');
 
         $response->assertStatus(404);
+    }
+
+    /** @test */
+    function registering_with_a_valid_invitation_code()
+    {
+        $this->withoutExceptionHandling();
+
+        $invitation = factory(Invitation::class)->create([
+            'user_id' => null,
+            'code' => 'TESTCODE1234',
+        ]);
+
+        $response = $this->post('/register', [
+            'email' => 'john@example.com',
+            'password' => 'secret',
+            'invitation_code' => 'TESTCODE1234'
+        ]);
+
+        $response->assertRedirect('/backstage/concerts');
+        $this->assertEquals(1, User::count());
+        $user = User::first();
+        $this->assertAuthenticatedAs($user);
+        $this->assertEquals('john@example.com', $user->email);
+        $this->assertTrue(Hash::check('secret', $user->password));
+        $this->assertTrue($invitation->fresh()->user->is($user));
+    }
+
+    /** @test */
+    function registering_with_a_used_invitation_code()
+    {
+        $invitation = factory(Invitation::class)->create([
+            'user_id' => factory(User::class)->create(),
+            'code' => 'TESTCODE1234',
+        ]);
+
+        $response = $this->post('/register', [
+            'email' => 'john@example.com',
+            'password' => 'secret',
+            'invitation_code' => 'TESTCODE1234'
+        ]);
+
+        $response->assertStatus(404);
+        $this->assertEquals(1, User::count());
+    }
+
+    /** @test */
+    function registering_with_an_invitation_code_that_does_not_exist()
+    {
+        $response = $this->post('/register', [
+            'email' => 'john@example.com',
+            'password' => 'secret',
+            'invitation_code' => 'TESTCODE1234'
+        ]);
+
+        $response->assertStatus(404);
+        $this->assertEquals(0, User::count());
     }
 }
 
