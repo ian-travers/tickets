@@ -4,12 +4,11 @@ namespace App\Providers;
 
 use App\Billing\PaymentGatewayInterface;
 use App\Billing\StripePaymentGateway;
-use App\Facades\TicketCode;
 use App\HashidsTicketCodeGenerator;
+use App\InvitationCodeGeneratorInterface;
 use App\OrderConfirmationNumberGeneratorInterface;
 use App\RandomOrderConfirmationNumberGenerator;
 use App\TicketCodeGeneratorInterface;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PaymentGatewayInterface::class, StripePaymentGateway::class);
 
         $this->app->bind(OrderConfirmationNumberGeneratorInterface::class, RandomOrderConfirmationNumberGenerator::class);
+        $this->app->bind(InvitationCodeGeneratorInterface::class, RandomOrderConfirmationNumberGenerator::class);
         $this->app->bind(TicketCodeGeneratorInterface::class, HashidsTicketCodeGenerator::class);
     }
 

@@ -4,7 +4,7 @@
 namespace App;
 
 
-class RandomOrderConfirmationNumberGenerator implements OrderConfirmationNumberGeneratorInterface
+class RandomOrderConfirmationNumberGenerator implements OrderConfirmationNumberGeneratorInterface, InvitationCodeGeneratorInterface
 {
     public function generate()
     {
