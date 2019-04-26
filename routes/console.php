@@ -2,13 +2,10 @@
 
 use App\Invitation;
 use App\Facades\InvitationCode;
-use App\Mail\InvitationEmail;
 
 Artisan::command('invite-promoter {email}', function ($email) {
-    $invitation = Invitation::create([
+    Invitation::create([
         'email' => $email,
         'code' => InvitationCode::generate(),
-    ]);
-
-    Mail::to($email)->send(new InvitationEmail($invitation));
+    ])->send();
 })->describe('Invite a new promoter to create an account.');
