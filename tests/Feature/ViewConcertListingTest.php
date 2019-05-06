@@ -11,7 +11,7 @@ class ViewConcertListingTest extends TestCase
     /** @test  */
     function user_can_view_a_published_concert_listing()
     {
-        // Arrange | Организация
+        // Arrange
         // Create a concert
         $concert = factory(Concert::class)->states('published')->create([
             'title' => 'Industrial and Electronic',
